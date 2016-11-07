@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E112CF57-1102-465F-B3CE-3CBAFD2637AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4CC38563-F42C-45A8-A741-F506E12A3857}"
+	ProjectSection(SolutionItems) = preProject
+		nupkg\pack.bat = nupkg\pack.bat
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4941C38C-5760-4C12-BB1E-64A3BC4761B1}"
 EndProject
@@ -13,7 +16,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FxUtility.DataStructuresCSh
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataStructuresCSharpTest", "test\DataStructuresCSharpTest\DataStructuresCSharpTest.xproj", "{EF28F32D-DC0A-4DF9-AFDE-39302D07057E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataStructuresCpp", "src\FxUtility.DataStructuresCpp\FxUtility.DataStructuresCpp.vcxproj", "{67FFD67F-F282-4362-84EE-E336117AF15B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FxUtility.DataStructuresCpp", "src\FxUtility.DataStructuresCpp\FxUtility.DataStructuresCpp.vcxproj", "{67FFD67F-F282-4362-84EE-E336117AF15B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
