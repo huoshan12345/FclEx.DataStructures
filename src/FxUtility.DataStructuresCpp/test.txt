@@ -1,0 +1,189 @@
+Why can't I return a double from two ints being divided
+
+up vote
+48
+down vote
+favorite
+3
+Relatively new to coding and have an issue regarding basic division. How come to following doesn't return the answer I thought it would:
+
+int a=7;
+int b=3;
+double c=0;
+c=a/b;
+I would have put money on the result being 2.3333, however it only returns 2. If A and B are then reassigned to being doubles the answer does turn to 2.333. But surely because C is already a double it should have worked?
+
+How come int/int=double doesn't work? Maybe an odd question but it's puzzled me.
+
+c++ variables double integer-division
+shareeditflag
+asked Sep 27 '11 at 15:02
+
+Jahoe
+3451318
+add a comment
+8 Answers
+active oldest votes
+up vote
+67
+down vote
+accepted
+This is because you are using the integer division version of operator/, which takes 2 ints and returns an int. In order to use the double version, which returns a double, at least one of the ints must be explicitly casted to a double.
+
+c = a/(double)b;
+shareeditflag
+answered Sep 27 '11 at 15:05
+
+Chad La Guardia
+2,79211529
+3	
+ 		
+I would prefer to explicitly convert both a and b to double simply for clarity, but it really doesn't matter. – John Dibling Sep 27 '11 at 15:31 
+11	
+ 		
+Since the question is tagged C++ I would prefer to see static_cast<> rather than a C cast. – Loki Astari Sep 27 '11 at 15:41
+5	
+ 		
+Personally, I feel that the C style casts are clearer (casting in most other common languages is done in the C style way). static_cast<> always seemed long winded to me. In the case of primitives, there is not really any danger of getting static_cast<> and reinterpret_cast<> mixed up. – Chad La Guardia Sep 27 '11 at 15:47
+4	
+ 		
+@Tux-D: For arithmetic casts? I would prefer to avoid static_cast in this case and use C-style cast instead. There's no benefit in using C++-style casts here and they clutter the code a lot more than C-style casts. Arithmetic cast is exactly the context where C-style casts are perfectly appropriate and actually more appropriate than other casts. – AnT Sep 27 '11 at 16:14 
+7	
+ 		
+Sometimes you can outwit the "no C-style-cast" folks by writing double(b). They don't always realise that it's a conversion, since it looks the same as an explicit constructor call. – Steve Jessop Sep 27 '11 at 16:26
+show 1 more comment
+up vote
+7
+down vote
+Here it is:
+
+a) Dividing two ints performs integer division always. So the result of a/b in your case can only be an int.
+
+If you want to keep a and b as ints, yet divide them fully, you must cast at least one of them to double: (double)a/b or a/(double)b or (double)a/(double)b.
+
+b) c is a double, so it can accept an int value on assignement: the int is automatically converted to double and assigned to c.
+
+c) Remember that on assignement, the expression to the right of = is computed first (according to rule (a) above, and without regard of the variable to the left of =) and then assigned to the variable to the left of = (according to (b) above). I believe this completes the picture.
+
+shareeditflag
+answered Sep 27 '11 at 15:15
+
+nplatis
+30218
+add a comment
+up vote
+7
+down vote
+With very few exceptions (I can only think of one), C++ determines the entire meaning of an expression (or sub-expression) from the expression itself. What you do with the results of the expression doesn't matter. In your case, in the expression a / b, there's not a double in sight; everything is int. So the compiler uses integer division. Only once it has the result does it consider what to do with it, and convert it to double.
+
+shareeditflag
+answered Sep 27 '11 at 15:11
+
+James Kanze
+113k690212
+  	
+ 		
+The one exception I can think of is choosing a function overload when taking a pointer - the value of &funcname depends what type you cast it to. – Steve Jessop Sep 27 '11 at 15:44 
+  	
+ 		
+@Steve Jessop That's the only exception I can think of as well. (But given the size and complexity of the standard, I wouldn't like to swear that I haven't missed any.) – James Kanze Sep 27 '11 at 16:01
+add a comment
+up vote
+4
+down vote
+When you divide two integers, the result will be an integer, irrespective of the fact that you store it in a double.
+
+shareeditflag
+answered Sep 27 '11 at 15:06
+
+Alok Save
+138k23260414
+add a comment
+up vote
+3
+down vote
+In C++ language the result of the subexpresison is never affected by the surrounding context (with some rare exceptions). This is one of the principles that the language carefully follows. The expression c = a / b contains of an independent subexpression a / b, which is interpreted independently from anything outside that subexpression. The language does not care that you later will assign the result to a double. a / b is an integer division. Anything else does not matter. You will see this principle followed in many corners of the language specification. That's juts how C++ (and C) works.
+
+One example of an exception I mentioned above is the function pointer assignment/initialization in situations with function overloading
+
+void foo(int);
+void foo(double);
+
+void (*p)(double) = &foo; // automatically selects `foo(fouble)`
+This is one context where the left-hand side of an assignment/initialization affects the behavior of the right-hand side. (Also, reference-to-array initialization prevents array type decay, which is another example of similar behavior.) In all other cases the right-hand side completely ignores the left-hand side.
+
+shareeditflag
+answered Sep 27 '11 at 16:20
+
+AnT
+197k24285517
+add a comment
+up vote
+3
+down vote
+c is a double variable, but the value being assigned to it is an int value because it results from the division of two ints, which gives you "integer division" (dropping the remainder). So what happens in the line c=a/b is
+
+a/b is evaluated, creating a temporary of type int
+the value of the temporary is assigned to c after conversion to type double.
+The value of a/b is determined without reference to its context (assignment to double).
+
+shareeditflag
+answered Sep 27 '11 at 15:04
+
+Fred Foo
+224k33419598
+add a comment
+up vote
+2
+down vote
+The / operator can be used for integer division or floating point division. You're giving it two integer operands, so it's doing integer division and then the result is being stored in a double.
+
+shareeditflag
+answered Sep 27 '11 at 15:07
+
+Vicky
+8,56113245
+add a comment
+up vote
+2
+down vote
+This is technically a language-dependent, but almost all languages treat this subject the same. When there is a type mismatch between two data types in an expression, most languages will try to cast the data on one side of the = to match the data on the other side according to a set of predefined rules.
+
+When dividing two numbers of the same type (integers, doubles, etc.) the result will always be of the same type (so 'int/int' will always result in int).
+
+In this case you have double var = integer result which casts the integer result to a double after the calculation in which case the fractional data is already lost. (most languages will do this casting to prevent type inaccuracies without raising an exception or error).
+
+If you'd like to keep the result as a double you're going to want to create a situation where you have double var = double result
+
+The easiest way to do that is to force the expression on the right side of an equation to cast to double:
+
+c = a/(double)b
+
+Division between an integer and a double will result in casting the integer to the double (note that when doing maths, the compiler will often "upcast" to the most specific data type this is to prevent data loss).
+
+After the upcast, a will wind up as a double and now you have division between two doubles. This will create the desired division and assignment.
+
+AGAIN, please note that this is language specific (and can even be compiler specific), however almost all languages (certainly all the ones I can think of off the top of my head) treat this example identically.
+
+shareeditflag
+edited Sep 27 '11 at 20:22
+answered Sep 27 '11 at 15:12
+
+Matt Dunnam
+81421531
+  	
+ 		
+This question is tagged [C++], and the C++ Standard dictates exactly how this works. Not sure what you mean by "language specific" and it's certainly not compiler-specific, assuming no compiler extenstions are engaged. – John Dibling Sep 27 '11 at 15:32 
+  	
+ 		
+Also it's incorrect to say that "double var = integer result which casts the double var down to int". The double isn't cast to an int. The int result is converted to a double. – John Dibling Sep 27 '11 at 15:35
+  	
+ 		
+I was allowing for the possibility of compiler extensions (I've actually had this issue once where my environment was "mis-casting" the results and I couldn't figure out why). And the result is language specific as in some languages don't follow the same casting rules. I didn't consider that it was a C++ specific tag. You're right about the "double var = integer result" comment. Edited to reflect that. Thank you! – Matt Dunnam Sep 27 '11 at 20:18 
+add a comment
+Your Answer
+
+Links Images Styling/Headers Lists Blockquotes Code HTML advanced help »
+
+  community wiki
+Post Your Answer20916988,20916989,20916990,20916991,20916992,20916993,20916994,20916995,20916996,20916997

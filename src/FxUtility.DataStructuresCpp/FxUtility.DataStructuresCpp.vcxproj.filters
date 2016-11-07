@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Algorithms">
+      <UniqueIdentifier>{7f8c2337-6bee-4c54-9983-4702ad64a37f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Node">
+      <UniqueIdentifier>{adadbb90-7015-4dc7-9054-9e0e01d17382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\HuffmanTree">
+      <UniqueIdentifier>{a0d118f1-b880-412c-ae70-80246d611f95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper">
+      <UniqueIdentifier>{fb6fd17d-ce4c-4af6-9127-ba01ba54d338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collections">
+      <UniqueIdentifier>{dfaaedce-26b5-45cf-a07e-ba72452acaef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{cb8f62bf-5241-4765-9390-d742d16cfe8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Example">
+      <UniqueIdentifier>{b1dba587-b430-4e6c-858b-cf21b1616ed0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HuffmanTreeHeader.hpp">
+      <Filter>Algorithms\HuffmanTree</Filter>
+    </ClInclude>
+    <ClInclude Include="HuffmanTreeNode.hpp">
+      <Filter>Algorithms\HuffmanTree</Filter>
+    </ClInclude>
+    <ClInclude Include="HuffmanTreeEncoder.h">
+      <Filter>Algorithms\HuffmanTree</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseBinarySearchTree.hpp">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseBinaryTreeNode.hpp">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseNode.hpp">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="BinarySearchTreeNode.hpp">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="StringHelper.hpp">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="BitConverter.hpp">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Comparer.hpp">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="FileHelper.hpp">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.hpp">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="IKeyValueCollection.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="ICollection.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="SkipList.hpp">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="MapHelper.hpp">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Iterator.hpp">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="Test.hpp" />
+    <ClInclude Include="VectorHelper.hpp">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="rule_of_five.hpp">
+      <Filter>Example</Filter>
+    </ClInclude>
+    <ClInclude Include="NonCopyable.hpp">
+      <Filter>Base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="HuffmanTreeEncoder.cpp">
+      <Filter>Algorithms\HuffmanTree</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object.hpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="rule_of_three.hpp">
+      <Filter>Example</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Collections.natvis" />
+  </ItemGroup>
+</Project>
