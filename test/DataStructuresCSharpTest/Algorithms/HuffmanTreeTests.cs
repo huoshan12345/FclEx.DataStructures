@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using DataStructuresCSharp.Algorithms;
+using FxUtility.Algorithms;
 using Xunit;
 
 namespace DataStructuresCSharpTest.Algorithms

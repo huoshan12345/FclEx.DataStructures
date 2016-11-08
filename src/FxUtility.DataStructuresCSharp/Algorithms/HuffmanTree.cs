@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using DataStructuresCSharp.Node;
 using DataStructuresCSharp.Util;
 
-namespace DataStructuresCSharp.Algorithms
+namespace FxUtility.Algorithms
 {
 
     public static class HuffmanTree
