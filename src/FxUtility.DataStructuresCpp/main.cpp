@@ -52,19 +52,23 @@ static void TestKeyValueCollection()
 
 int main(void)
 {
-	//cout << "压缩字符串" << endl;
-	//string str = "static_cast is the first cast you should attempt to use. It does things like implicit conversions between types (such as int to float, or pointer to void*), and it can also call explicit conversion functions (or implicit ones). In many cases, explicitly stating static_cast isn't necessary, but it's important to note that the T(something) syntax is equivalent to (T)something and should be avoided (more on that later). A T(something, something_else) is safe, however, and guaranteed to call the constructor.";	
-	//TestHuffmanEncoding(vector<byte>(str.begin(), str.end()));
-	//cin.get();
+	cout << "压缩字符串" << endl;
+	string str = "static_cast is the first cast you should attempt to use. It does things like implicit conversions between types (such as int to float, or pointer to void*), and it can also call explicit conversion functions (or implicit ones). In many cases, explicitly stating static_cast isn't necessary, but it's important to note that the T(something) syntax is equivalent to (T)something and should be avoided (more on that later). A T(something, something_else) is safe, however, and guaranteed to call the constructor.";	
+	SpeedTest__("压缩字符串用时：")
+	{
+		TestHuffmanEncoding(vector<byte>(str.begin(), str.end()));
+	}	
 
-	//cout << "压缩文件" << endl;
-	//const auto file = R"(test.txt)";
-	//SpeedTest__("压缩文件用时：")
-	//{
-	//	TestHuffmanEncoding(FileHelper::ReadFile(file));
-	//}
-	// cin.get();
-	TestKeyValueCollection();
+	cout << "压缩文件" << endl;
+	const auto file = R"(test.txt)";
+	SpeedTest__("压缩文件用时：")
+	{
+		TestHuffmanEncoding(FileHelper::ReadFile(file));
+	}
+	 cin.get();
+
+
+	// TestKeyValueCollection();
 
 
 	cin.get();

@@ -97,20 +97,20 @@ namespace FxUtility
 
 			vector<byte> HuffmanTreeEncoder::Encode(vector<byte> datas)
 			{
-				var header = make_unique<HuffmanTreeHeader>(datas, true);
-				var tree = BuildTree(header->FreqArray());
+				HuffmanTreeHeader header(datas, true);
+				var tree = BuildTree(header.FreqArray());
 				var root = std::get<0>(tree);
 				var leafNodeList = std::get<1>(tree);
 				var encodingTable = BuildEncodingTable(leafNodeList);
 				root->DestroyTree();
 
 				vector<bool> encodedSource;
-				encodedSource.reserve(datas.size() * 8 + header->HeaderLength() * 8);
-				for (auto data : datas)
+				encodedSource.reserve(datas.size() * 8 + header.HeaderLength() * 8);
+				for (auto &data : datas)
 				{
 					VectorHelper::Append(encodedSource, encodingTable[data]);
 				}	
-				auto headerBytes = header->ToBytes();
+				auto headerBytes = header.ToBytes();
 				auto encodedSourceBytes = BitConverter::GetBytes(encodedSource);
 				VectorHelper::Append(headerBytes, encodedSourceBytes);
 				return headerBytes;
@@ -118,13 +118,13 @@ namespace FxUtility
 
 			vector<byte> HuffmanTreeEncoder::Decode(vector<byte> datas)
 			{
-				var header = make_unique<HuffmanTreeHeader>(datas, false);
-				var root = std::get<0>(BuildTree(header->FreqArray()));
-				vector<byte> resultBytes(header->DataLength());
+				HuffmanTreeHeader header(datas, false);
+				var root = std::get<0>(BuildTree(header.FreqArray()));
+				vector<byte> resultBytes(header.DataLength());
 				var bits = BitConverter::BytesToBits(datas);
-				var bitIndex = header->HeaderLength() * 8;
+				var bitIndex = header.HeaderLength() * 8;
 
-				for (size_t i = 0; i < header->DataLength(); ++i)
+				for (size_t i = 0; i < header.DataLength(); ++i)
 				{
 					resultBytes[i] = HuffmanTree::Decode(bits, bitIndex, root);
 				}
