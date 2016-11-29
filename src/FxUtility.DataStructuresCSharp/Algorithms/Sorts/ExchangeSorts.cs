@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using static DataStructuresCSharp.Util.Helper;
+using DataStructuresCSharp.Util;
 
-namespace DataStructuresCSharp.Algorithms.Sorts
+namespace FxUtility.Algorithms.Sorts
 {
     public static class ExchangeSorts<T> where T : IComparable<T>
     {
@@ -20,7 +17,7 @@ namespace DataStructuresCSharp.Algorithms.Sorts
                 {
                     if (arr[j].CompareTo(arr[j + 1]) > 0)
                     {
-                        Swap(ref arr[j], ref arr[j + 1]);
+                        Helper.Swap(ref arr[j], ref arr[j + 1]);
                     }
                 }
             }
@@ -41,7 +38,7 @@ namespace DataStructuresCSharp.Algorithms.Sorts
                     if (arr[j].CompareTo(arr[j + 1]) > 0)
                     {
                         pos = j; //记录交换的位置   
-                        Swap(ref arr[j], ref arr[j + 1]);
+                        Helper.Swap(ref arr[j], ref arr[j + 1]);
                     }
                 }
                 i = pos; //为下一趟排序作准备  
@@ -62,7 +59,7 @@ namespace DataStructuresCSharp.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + 1]) > 0)
                     {
-                        Swap(ref arr[i], ref arr[i + 1]);
+                        Helper.Swap(ref arr[i], ref arr[i + 1]);
                     }
                 }
                 --high;                 //修改high值, 前移一位  
@@ -71,7 +68,7 @@ namespace DataStructuresCSharp.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i - 1]) < 0)
                     {
-                        Swap(ref arr[i], ref arr[i - 1]);
+                        Helper.Swap(ref arr[i], ref arr[i - 1]);
                     }
                 }
                 ++low;                  //修改low值,后移一位  
@@ -93,7 +90,7 @@ namespace DataStructuresCSharp.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + 1]) > 0)
                     {
-                        Swap(ref arr[i], ref arr[i + 1]);
+                        Helper.Swap(ref arr[i], ref arr[i + 1]);
                         bSorted = false;
                     }
                 }
@@ -101,7 +98,7 @@ namespace DataStructuresCSharp.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + 1]) > 0)
                     {
-                        Swap(ref arr[i], ref arr[i + 1]);
+                        Helper.Swap(ref arr[i], ref arr[i + 1]);
                         bSorted = false;
                     }
                 }
@@ -126,7 +123,7 @@ namespace DataStructuresCSharp.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + gap]) > 0)
                     {
-                        Swap(ref arr[i], ref arr[i + gap]);
+                        Helper.Swap(ref arr[i], ref arr[i + gap]);
                         bSwapped = true;
                     }
                     ++i;
