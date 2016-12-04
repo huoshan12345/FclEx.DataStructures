@@ -1,9 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataStructuresCSharp.Node;
+using FxUtility.Node;
 
 namespace FxUtility.Collections
 {
+    public class AvlTreeNode<TKey, TValue> : BaseBinaryTreeNode<KeyValuePair<TKey, TValue>, AvlTreeNode<TKey, TValue>>
+    {
+
+        public int BalanceFactor { get; set; }
+
+        public AvlTreeNode(TKey key, TValue value, int balanceFactor = 0, AvlTreeNode<TKey, TValue> left = null, AvlTreeNode<TKey, TValue> right = null, AvlTreeNode<TKey, TValue> parent = null)
+            : this(new KeyValuePair<TKey, TValue>(key, value), balanceFactor, left, right, parent) { }
+
+        public AvlTreeNode(KeyValuePair<TKey, TValue> item, int balanceFactor = 0, AvlTreeNode<TKey, TValue> left = null,
+            AvlTreeNode<TKey, TValue> right = null, AvlTreeNode<TKey, TValue> parent = null)
+            : base(item, left, right, parent)
+        {
+            BalanceFactor = balanceFactor;
+        }
+    }
+
     /// <summary>
     /// AVL tree is a self-balancing binary search tree
     /// </summary>

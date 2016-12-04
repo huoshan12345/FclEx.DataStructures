@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataStructuresCSharp.Node;
+using FxUtility.Node;
 
 namespace FxUtility.Collections
 {

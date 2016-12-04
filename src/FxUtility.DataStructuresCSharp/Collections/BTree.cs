@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace FxUtility.Collections
@@ -281,7 +282,7 @@ namespace FxUtility.Collections
 
         private static void DeleteItemAndChildFromNode(BTreeNode node, int itemIndex, int childIndex = -1)
         {
-            Debug.Assert(itemIndex >= 0 && itemIndex < node.KeyNum, $"{nameof(itemIndex)} is out of range");
+            Contract.Ensures(itemIndex >= 0 && itemIndex < node.KeyNum, $"{nameof(itemIndex)} is out of range");
             for (var i = itemIndex; i < node.KeyNum - 1; i++)
             {
                 node.Items[i] = node.Items[i + 1];
@@ -290,7 +291,7 @@ namespace FxUtility.Collections
 
             if (!node.IsLeafNode)
             {
-                Debug.Assert(childIndex >= 0 && childIndex <= node.KeyNum, $"{nameof(childIndex)} is out of range");
+                Contract.Ensures(childIndex >= 0 && childIndex <= node.KeyNum, $"{nameof(childIndex)} is out of range");
                 if (node.Children[childIndex] != null) node.Children[childIndex].Parent = null;
                 for (var i = childIndex; i < node.KeyNum; i++)
                 {
@@ -303,7 +304,7 @@ namespace FxUtility.Collections
 
         private static void InsertItemAndChildIntoNode(BTreeNode node, KeyValuePair<TKey, TValue> item, int itemInsertIndex, BTreeNode child = null, int childInsertIndex = -1)
         {
-            Debug.Assert(itemInsertIndex >= 0 && itemInsertIndex <= node.KeyNum, $"{nameof(itemInsertIndex)} is out of range");
+            Contract.Ensures(itemInsertIndex >= 0 && itemInsertIndex <= node.KeyNum, $"{nameof(itemInsertIndex)} is out of range");
             for (var i = node.KeyNum - 1; i >= itemInsertIndex; i--)
             {
                 node.Items[i + 1] = node.Items[i];
@@ -312,8 +313,8 @@ namespace FxUtility.Collections
 
             if (!node.IsLeafNode)
             {
-                Debug.Assert(child != null);
-                Debug.Assert(childInsertIndex >= 0 && childInsertIndex <= node.KeyNum + 1, $"{nameof(childInsertIndex)} is out of range");
+                Contract.Ensures(child != null);
+                Contract.Ensures(childInsertIndex >= 0 && childInsertIndex <= node.KeyNum + 1, $"{nameof(childInsertIndex)} is out of range");
                 for (var i = node.KeyNum; i >= childInsertIndex; i--)
                 {
                     node.Children[i + 1] = node.Children[i];
@@ -326,10 +327,10 @@ namespace FxUtility.Collections
 
         private void RebalanceForDeletion(BTreeNode node)
         {
-            Debug.Assert(node != _root && node.KeyNum < MinKeyNum, $"{nameof(node)} does not need to rebalance");
+            Contract.Ensures(node != _root && node.KeyNum < MinKeyNum, $"{nameof(node)} does not need to rebalance");
             var parent = node.Parent;
             var childIndex = node.GetChildIndex();
-            Debug.Assert(childIndex >= 0, "pointers between child and parent are not correct");
+            Contract.Ensures(childIndex >= 0, "pointers between child and parent are not correct");
 
             var rightSiblingIndex = childIndex + 1;
             var leftSiblingIndex = childIndex - 1;
@@ -379,19 +380,19 @@ namespace FxUtility.Collections
             else if (leftSiblingIndex >= 0) MergeTwoNodes(parent, leftSiblingIndex);
             else
             {
-                Debug.Assert(false, "cannot reach here!");
+                Contract.Ensures(false, "cannot reach here!");
             }
         }
 
         private void MergeTwoNodes(BTreeNode parent, int leftIndex)
         {
-            Debug.Assert(leftIndex >= 0 && leftIndex < parent.KeyNum, $"{nameof(leftIndex)} is out of range");
+            Contract.Ensures(leftIndex >= 0 && leftIndex < parent.KeyNum, $"{nameof(leftIndex)} is out of range");
 
             var left = parent.Children[leftIndex];
             var right = parent.Children[leftIndex + 1];
 
-            Debug.Assert(left.KeyNum <= MinKeyNum, $"{nameof(left)} has more than {MinKeyNum} items");
-            Debug.Assert(right.KeyNum <= MinKeyNum, $"{nameof(right)} has more than {MinKeyNum} items");
+            Contract.Ensures(left.KeyNum <= MinKeyNum, $"{nameof(left)} has more than {MinKeyNum} items");
+            Contract.Ensures(right.KeyNum <= MinKeyNum, $"{nameof(right)} has more than {MinKeyNum} items");
 
             left.Items[left.KeyNum++] = parent.Items[leftIndex];
             for (var i = 0; i < right.KeyNum; i++)
@@ -422,7 +423,7 @@ namespace FxUtility.Collections
 
         private static BTreeNode FindMinNode(BTreeNode node)
         {
-            Debug.Assert(node != null);
+            Contract.Ensures(node != null);
             var p = node;
             while (!p.IsLeafNode)
             {
@@ -433,7 +434,7 @@ namespace FxUtility.Collections
 
         private static BTreeNode FindMaxNode(BTreeNode node)
         {
-            Debug.Assert(node != null);
+            Contract.Ensures(node != null);
             var p = node;
             while (!p.IsLeafNode)
             {
@@ -465,7 +466,7 @@ namespace FxUtility.Collections
             {
                 if (!node.IsLeafNode)
                 {
-                    Debug.Assert(node.Children[i] != null);
+                    Contract.Ensures(node.Children[i] != null);
                     foreach (var n in InOrderTraverse(node.Children[i]))
                     {
                         yield return n;
@@ -476,7 +477,7 @@ namespace FxUtility.Collections
             }
             if (!node.IsLeafNode)
             {
-                Debug.Assert(node.Children[node.KeyNum] != null);
+                Contract.Ensures(node.Children[node.KeyNum] != null);
                 foreach (var n in InOrderTraverse(node.Children[node.KeyNum]))
                 {
                     yield return n;
@@ -614,10 +615,7 @@ namespace FxUtility.Collections
                 _index = -1;
             }
 
-            public void Dispose()
-            {
-                _enumerator.Dispose();
-            }
+            public void Dispose() => _enumerator.Dispose();
 
             public bool MoveNext()
             {

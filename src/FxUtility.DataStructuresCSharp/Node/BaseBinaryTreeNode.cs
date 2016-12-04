@@ -1,4 +1,4 @@
-﻿namespace DataStructuresCSharp.Node
+﻿namespace FxUtility.Node
 {
     public abstract class BaseBinaryTreeNode<T, TNode> : BaseNode<T, TNode> where TNode : BaseNode<T, TNode>
     {

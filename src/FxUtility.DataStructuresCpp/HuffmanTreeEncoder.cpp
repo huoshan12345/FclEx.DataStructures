@@ -52,7 +52,7 @@ namespace FxUtility
 
 				for (const auto &leafNode : leafNodeList)
 				{
-					auto code = GetCode(leafNode);
+					auto &&code = GetCode(leafNode);
 					result[leafNode->Item] = code;
 				}
 				return result;

@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
-using DataStructuresCSharp.Node;
 using DataStructuresCSharp.Util;
+using FxUtility.Node;
 
 namespace FxUtility.Algorithms
 {
@@ -82,7 +83,7 @@ namespace FxUtility.Algorithms
 
             private static byte[] CompressFreqArray(int[] freqArray)
             {
-                Debug.Assert(MaxLength == freqArray.Length);
+                Contract.Ensures(MaxLength == freqArray.Length);
                 var byteDic = new Dictionary<byte, int>(MaxLength);
                 var ushortDic = new Dictionary<byte, int>(MaxLength);
                 var intDic = new Dictionary<byte, int>(MaxLength);
@@ -159,7 +160,7 @@ namespace FxUtility.Algorithms
                     index += 4;
                     freqArray[itemIndex] = freq;
                 }
-                Debug.Assert(index == datas.Length);
+                Contract.Ensures(index == datas.Length);
                 return freqArray;
             }
 
@@ -255,7 +256,7 @@ namespace FxUtility.Algorithms
                 nodeArr[i] = new HuffmanTreeNode(i, freqArray[i], i);
             }
             var priQueue = new SortedSet<HuffmanTreeNode>(nodeArr);
-            Debug.Assert(priQueue.Count == nodeArr.Length);
+            Contract.Ensures(priQueue.Count == nodeArr.Length);
             var leafNodeArr = new HuffmanTreeNode[MaxLength];
 
             var leafIndex = 0;
@@ -263,17 +264,17 @@ namespace FxUtility.Algorithms
             while (priQueue.Count >= 2)
             {
                 var node1 = priQueue.Min();
-                if (!priQueue.Remove(node1)) Debug.Assert(false);
+                if (!priQueue.Remove(node1)) Contract.Ensures(false);
                 var node2 = priQueue.Min();
-                if (!priQueue.Remove(node2)) Debug.Assert(false);
+                if (!priQueue.Remove(node2)) Contract.Ensures(false);
                 if (node1.IsLeafNode) leafNodeArr[leafIndex++] = node1;
                 if (node2.IsLeafNode) leafNodeArr[leafIndex++] = node2;
-                if (!priQueue.Add(new HuffmanTreeNode(node1, node2, id++))) Debug.Assert(false);
+                if (!priQueue.Add(new HuffmanTreeNode(node1, node2, id++))) Contract.Ensures(false);
             }
 #if DEBUG
             var list = priQueue.Min().Traverse().ToList();
-            Debug.Assert(list.Count == 2 * MaxLength - 1);
-            Debug.Assert(list.Count(item => item.IsLeafNode) == MaxLength);
+            Contract.Ensures(list.Count == 2 * MaxLength - 1);
+            Contract.Ensures(list.Count(item => item.IsLeafNode) == MaxLength);
 #endif
             return new Tuple<HuffmanTreeNode, HuffmanTreeNode[]>(priQueue.Min(), leafNodeArr);
         }
@@ -291,7 +292,7 @@ namespace FxUtility.Algorithms
 
         private static List<bool> GetCode(HuffmanTreeNode leafNode)
         {
-            Debug.Assert(leafNode.IsLeafNode);
+            Contract.Ensures(leafNode.IsLeafNode);
             var p = leafNode;
             var bits = new List<bool>();
             while (p.Parent != null)

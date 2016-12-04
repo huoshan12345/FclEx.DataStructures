@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataStructuresCSharp.Node
+namespace FxUtility.Node
 {
     public abstract class BaseNode<T, TNode> where TNode : BaseNode<T, TNode>
     {

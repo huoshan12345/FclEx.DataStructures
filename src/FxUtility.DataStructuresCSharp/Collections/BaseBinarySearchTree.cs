@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DataStructuresCSharp.Node;
+using FxUtility.Node;
 
 namespace FxUtility.Collections
 {
@@ -22,7 +22,7 @@ namespace FxUtility.Collections
             _valueComparer = EqualityComparer<TValue>.Default;
         }
 
-        protected BaseBinarySearchTree(IDictionary<TKey, TValue> dictionary, IComparer<TKey> comparer = null) : this(comparer)
+        protected BaseBinarySearchTree(Dictionary<TKey, TValue> dictionary, IComparer<TKey> comparer = null) : this(comparer)
         {
             if (dictionary == null) throw new ArgumentNullException(nameof(dictionary));
             foreach (var item in dictionary)

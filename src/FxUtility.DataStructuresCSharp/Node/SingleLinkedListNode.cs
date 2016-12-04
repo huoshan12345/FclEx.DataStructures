@@ -1,4 +1,4 @@
-﻿namespace DataStructuresCSharp.Node
+﻿namespace FxUtility.Node
 {
     public class SingleLinkedListNode<T> : BaseNode<T, SingleLinkedListNode<T>>
     {

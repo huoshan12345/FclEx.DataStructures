@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace DataStructuresCSharp.Node
+namespace FxUtility.Node
 {
     public class BinarySearchTreeNode<TKey, TValue> : BaseBinaryTreeNode<KeyValuePair<TKey, TValue>, BinarySearchTreeNode<TKey, TValue>>
     {
