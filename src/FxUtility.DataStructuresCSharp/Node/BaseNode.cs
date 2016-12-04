@@ -5,14 +5,12 @@ namespace FxUtility.Node
     public abstract class BaseNode<T, TNode> where TNode : BaseNode<T, TNode>
     {
         public T Item { get; set; }
-        protected int NeighborNodesNum { get; }
         protected TNode[] NeighborNodes { get; set; }
 
         protected BaseNode(int neighborNodesNum, T item)
         {
             Item = item;
-            NeighborNodesNum = neighborNodesNum;
-            NeighborNodes = new TNode[NeighborNodesNum];
+            NeighborNodes = new TNode[neighborNodesNum];
         }
 
         public virtual void Invalidate()

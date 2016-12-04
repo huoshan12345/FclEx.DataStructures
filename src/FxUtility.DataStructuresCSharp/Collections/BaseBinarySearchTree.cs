@@ -22,7 +22,7 @@ namespace FxUtility.Collections
             _valueComparer = EqualityComparer<TValue>.Default;
         }
 
-        protected BaseBinarySearchTree(Dictionary<TKey, TValue> dictionary, IComparer<TKey> comparer = null) : this(comparer)
+        protected BaseBinarySearchTree(IDictionary<TKey, TValue> dictionary, IComparer<TKey> comparer = null) : this(comparer)
         {
             if (dictionary == null) throw new ArgumentNullException(nameof(dictionary));
             foreach (var item in dictionary)

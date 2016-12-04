@@ -39,19 +39,44 @@ namespace FxUtility.Collections
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+        private Tuple<TwoFourTreeNode, int> SearchItem(TKey key, bool checkValue = false, TValue value = default(TValue))
+        {
+            Contract.Requires<ArgumentNullException>(key != null);
+            var node = _root;
+            while (node != null)
+            {
+                var index = 0;
+                while (index < node.KeyNum)
+                {
+                    var cmp = _comparer.Compare(node.Items[index].Key, key);
+                    if (cmp == 0) return (checkValue && !_valueComparer.Equals(node.Items[index].Value, value)) ? null : Tuple.Create(node, index);
+                    else if (cmp > 0) break;
+                    else index++;
+                }
+                if (node.IsLeafNode) return null;
+                node = node.Children[index];
+            }
+            return null;
+        }
+
         public void Add(KeyValuePair<TKey, TValue> item)
         {
+            Contract.Requires<ArgumentNullException>(item.Key != null);
+            if (_root == null) _root = new TwoFourTreeNode(true);
             throw new NotImplementedException();
         }
 
-        public bool Contains(KeyValuePair<TKey, TValue> item)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Contains(KeyValuePair<TKey, TValue> item) => SearchItem(item.Key, true, item.Value) != null;
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            Contract.Requires<ArgumentNullException>(array != null);
+            Contract.Requires<ArgumentOutOfRangeException>((uint)arrayIndex <= (uint)array.Length);
+            Contract.Requires<ArgumentException>(array.Length >= _count + arrayIndex);
+            foreach (var item in Traverse())
+            {
+                array[arrayIndex++] = item;
+            }
         }
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
@@ -59,15 +84,9 @@ namespace FxUtility.Collections
             throw new NotImplementedException();
         }
 
-        public void Add(TKey key, TValue value)
-        {
-            throw new NotImplementedException();
-        }
+        public void Add(TKey key, TValue value) => Add(new KeyValuePair<TKey, TValue>(key, value));
 
-        public bool ContainsKey(TKey key)
-        {
-            throw new NotImplementedException();
-        }
+        public bool ContainsKey(TKey key) => SearchItem(key) != null;
 
         public bool Remove(TKey key)
         {
@@ -76,13 +95,31 @@ namespace FxUtility.Collections
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            throw new NotImplementedException();
+            var result = SearchItem(key);
+            if (result == null)
+            {
+                value = default(TValue);
+                return false;
+            }
+            value = result.Item1.Items[result.Item2].Value;
+            return true;
         }
 
         public TValue this[TKey key]
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get
+            {
+                var result = SearchItem(key);
+                Contract.Requires<KeyNotFoundException>(result != null);
+                return result.Item1.Items[result.Item2].Value;
+            }
+            set
+            {
+                var result = SearchItem(key);
+                if (result == null) Add(key, value);
+                else result.Item1.Items[result.Item2] = new KeyValuePair<TKey, TValue>(key, value);
+                _version++;
+            }
         }
 
         public ICollection<TKey> Keys => new BaseKeyCollection<TKey, TValue>(this);
@@ -128,7 +165,7 @@ namespace FxUtility.Collections
                 }
             }
 
-            private TwoFourTreeNode(bool isLeaf)
+            internal TwoFourTreeNode(bool isLeaf)
             {
                 KeyNum = 0;
                 Items = new KeyValuePair<TKey, TValue>[MaxKeyNum]; // t-1 ~ 2t-1
@@ -156,7 +193,6 @@ namespace FxUtility.Collections
                 }
                 return -1;
             }
-
 
             internal IEnumerable<KeyValuePair<TKey, TValue>> InOrderTraverse()
             {

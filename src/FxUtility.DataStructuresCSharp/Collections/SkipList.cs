@@ -290,7 +290,7 @@ namespace FxUtility.Collections
 
             public SkipListNode Next => NeighborNodes[0];
 
-            public int Height => NeighborNodesNum;
+            public int Height => NeighborNodes.Length;
 
             public static SkipListNode operator ++(SkipListNode node)
             {
