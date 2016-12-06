@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using FxUtility.Collections;
+using FclEx.Collections;
 
-namespace DataStructuresCSharp
+namespace FclEx
 {
     public static class ListTests
     {

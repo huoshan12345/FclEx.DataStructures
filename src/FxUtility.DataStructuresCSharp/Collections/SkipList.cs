@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using FxUtility.Node;
+using FclEx.Node;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     /// <summary>
     /// A SkipList is a data structure that allows fast search within an [ordered sequence] of elements
@@ -270,7 +270,7 @@ namespace FxUtility.Collections
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        private class SkipListNode : BaseNode<KeyValuePair<TKey, TValue>, SkipListNode>
+        private class SkipListNode : Node<KeyValuePair<TKey, TValue>, SkipListNode>
         {
             public SkipListNode(int level) : this(level, new KeyValuePair<TKey, TValue>(default(TKey), default(TValue)))
             {
@@ -286,11 +286,11 @@ namespace FxUtility.Collections
             {
             }
 
-            public SkipListNode[] NextNodes => NeighborNodes;
+            public SkipListNode[] NextNodes => Neighbors;
 
-            public SkipListNode Next => NeighborNodes[0];
+            public SkipListNode Next => Neighbors[0];
 
-            public int Height => NeighborNodes.Length;
+            public int Height => Neighbors.Length;
 
             public static SkipListNode operator ++(SkipListNode node)
             {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FxUtility.Collections;
 using DataStructuresCSharpTest.Common;
 using Xunit;
+using FclEx.Collections;
 
 namespace DataStructuresCSharpTest.Collections.MaxHeap
 {

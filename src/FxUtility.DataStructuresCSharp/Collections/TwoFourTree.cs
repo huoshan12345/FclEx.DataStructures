@@ -1,11 +1,11 @@
-﻿using System;
+﻿using FclEx.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     public class TwoFourTree<TKey, TValue> : IKeyValueCollection<TKey, TValue>
     {
@@ -39,7 +39,7 @@ namespace FxUtility.Collections
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        private Tuple<TwoFourTreeNode, int> SearchItem(TKey key, bool checkValue = false, TValue value = default(TValue))
+        private Tuple<TwoFourTreeNode, int> FindItem(TKey key, bool checkValue = false, TValue value = default(TValue))
         {
             Contract.Requires<ArgumentNullException>(key != null);
             var node = _root;
@@ -66,7 +66,7 @@ namespace FxUtility.Collections
             throw new NotImplementedException();
         }
 
-        public bool Contains(KeyValuePair<TKey, TValue> item) => SearchItem(item.Key, true, item.Value) != null;
+        public bool Contains(KeyValuePair<TKey, TValue> item) => FindItem(item.Key, true, item.Value) != null;
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
@@ -86,7 +86,7 @@ namespace FxUtility.Collections
 
         public void Add(TKey key, TValue value) => Add(new KeyValuePair<TKey, TValue>(key, value));
 
-        public bool ContainsKey(TKey key) => SearchItem(key) != null;
+        public bool ContainsKey(TKey key) => FindItem(key) != null;
 
         public bool Remove(TKey key)
         {
@@ -95,7 +95,7 @@ namespace FxUtility.Collections
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            var result = SearchItem(key);
+            var result = FindItem(key);
             if (result == null)
             {
                 value = default(TValue);
@@ -109,13 +109,13 @@ namespace FxUtility.Collections
         {
             get
             {
-                var result = SearchItem(key);
+                var result = FindItem(key);
                 Contract.Requires<KeyNotFoundException>(result != null);
                 return result.Item1.Items[result.Item2].Value;
             }
             set
             {
-                var result = SearchItem(key);
+                var result = FindItem(key);
                 if (result == null) Add(key, value);
                 else result.Item1.Items[result.Item2] = new KeyValuePair<TKey, TValue>(key, value);
                 _version++;
@@ -140,36 +140,23 @@ namespace FxUtility.Collections
         {
             private const int MinDegree = 2;
             private const int MaxDegree = 4;
+            private int MinKeyNum => MinDegree - 1;
+            private int MaxKeyNum => MaxDegree - 1;
 
             internal int KeyNum { get; private set; }
             internal KeyValuePair<TKey, TValue>[] Items { get; private set; }
-
-            private int MaxKeyNum => MaxDegree - 1;
             internal TwoFourTreeNode[] Children { get; private set; }
             private TwoFourTreeNode Parent { get; set; }
 
-            internal bool IsLeafNode
-            {
-                get { return Children == null; }
-                private set
-                {
-                    if (value)
-                    {
-                        if (Children != null) Array.Clear(Children, 0, Children.Length);
-                        Children = null;
-                    }
-                    else
-                    {
-                        if (Children == null) Children = new TwoFourTreeNode[MaxDegree];
-                    }
-                }
-            }
+            internal bool IsLeafNode => Children == null;
+            private const bool LowMemoryUsage = false; // low mem => low speed, high mem => high speed
 
             internal TwoFourTreeNode(bool isLeaf)
             {
                 KeyNum = 0;
-                Items = new KeyValuePair<TKey, TValue>[MaxKeyNum]; // t-1 ~ 2t-1
-                IsLeafNode = isLeaf;
+                var keyCapacity = LowMemoryUsage ? MinKeyNum : MaxKeyNum;
+                Items = new KeyValuePair<TKey, TValue>[keyCapacity]; // t-1 ~ 2t-1
+                if (!isLeaf) Children = new TwoFourTreeNode[keyCapacity + 1];
             }
 
             private void Invalidate()
@@ -184,14 +171,7 @@ namespace FxUtility.Collections
 
             private int GetChildIndex()
             {
-                if (Parent != null)
-                {
-                    for (var i = 0; i < Parent.KeyNum + 1; i++)
-                    {
-                        if (ReferenceEquals(Parent.Children[i], this)) return i;
-                    }
-                }
-                return -1;
+                return Parent?.Children.IndexOf(this) ?? -1;
             }
 
             internal IEnumerable<KeyValuePair<TKey, TValue>> InOrderTraverse()
@@ -230,13 +210,13 @@ namespace FxUtility.Collections
                     {
                         foreach (var t in item.Children)
                         {
-                            if (t != null) queue.Enqueue(t);
+                            Contract.Ensures(t != null);
+                            queue.Enqueue(t);
                         }
                     }
                     item.Invalidate();
                 }
             }
-
         }
 
         private struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
@@ -258,7 +238,7 @@ namespace FxUtility.Collections
 
             public bool MoveNext()
             {
-                if (_version != _tree._version) throw new InvalidOperationException();
+                Contract.Requires<InvalidOperationException>(_version != _tree._version);
                 if (!_enumerator.MoveNext())
                 {
                     _index = _tree.Count;
@@ -270,7 +250,7 @@ namespace FxUtility.Collections
 
             public void Reset()
             {
-                if (_version != _tree._version) throw new InvalidOperationException();
+                Contract.Requires<InvalidOperationException>(_version != _tree._version);
                 _enumerator = _tree.Traverse().GetEnumerator();
                 _index = -1;
             }

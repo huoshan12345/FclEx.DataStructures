@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     public class SeqQueue<T> : BaseSeqCollection<T>, IQueue<T>
     {

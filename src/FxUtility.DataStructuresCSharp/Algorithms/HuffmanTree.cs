@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using DataStructuresCSharp.Util;
-using FxUtility.Node;
+using FclEx.Extensions;
+using FclEx.Node;
 
-namespace FxUtility.Algorithms
+namespace FclEx.Algorithms
 {
 
     public static class HuffmanTree
     {
-        private class HuffmanTreeNode : BaseBinaryTreeNode<int, HuffmanTreeNode>, IComparable<HuffmanTreeNode>
+        private class HuffmanTreeNode : BinaryTreeNode<int, HuffmanTreeNode>, IComparable<HuffmanTreeNode>
         {
             private readonly int _frequency;
             private readonly int _id;
@@ -214,7 +213,7 @@ namespace FxUtility.Algorithms
             {
                 encodedSource.AddRange(encodingTable[data]);
             }
-            var encodedSourceBytes = encodedSource.ToByteArray();
+            var encodedSourceBytes = encodedSource.ToBytes();
             encodedSource.Clear();
             var bytes = new byte[header.HeaderLength + encodedSourceBytes.Length];
             header.ToBytes().CopyTo(bytes, 0);

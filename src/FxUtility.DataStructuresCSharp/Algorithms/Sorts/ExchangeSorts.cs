@@ -1,7 +1,7 @@
 ﻿using System;
-using DataStructuresCSharp.Util;
+using static FclEx.Helpers.ObjectHelper;
 
-namespace FxUtility.Algorithms.Sorts
+namespace FclEx.Algorithms.Sorts
 {
     public static class ExchangeSorts<T> where T : IComparable<T>
     {
@@ -17,7 +17,7 @@ namespace FxUtility.Algorithms.Sorts
                 {
                     if (arr[j].CompareTo(arr[j + 1]) > 0)
                     {
-                        Helper.Swap(ref arr[j], ref arr[j + 1]);
+                        Swap(ref arr[j], ref arr[j + 1]);
                     }
                 }
             }
@@ -38,7 +38,7 @@ namespace FxUtility.Algorithms.Sorts
                     if (arr[j].CompareTo(arr[j + 1]) > 0)
                     {
                         pos = j; //记录交换的位置   
-                        Helper.Swap(ref arr[j], ref arr[j + 1]);
+                        Swap(ref arr[j], ref arr[j + 1]);
                     }
                 }
                 i = pos; //为下一趟排序作准备  
@@ -59,7 +59,7 @@ namespace FxUtility.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + 1]) > 0)
                     {
-                        Helper.Swap(ref arr[i], ref arr[i + 1]);
+                        Swap(ref arr[i], ref arr[i + 1]);
                     }
                 }
                 --high;                 //修改high值, 前移一位  
@@ -68,7 +68,7 @@ namespace FxUtility.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i - 1]) < 0)
                     {
-                        Helper.Swap(ref arr[i], ref arr[i - 1]);
+                        Swap(ref arr[i], ref arr[i - 1]);
                     }
                 }
                 ++low;                  //修改low值,后移一位  
@@ -81,7 +81,7 @@ namespace FxUtility.Algorithms.Sorts
         /// <param name="arr"></param>
         public static void OddEvenSort(T[] arr)
         {
-            bool bSorted = false;
+            var bSorted = false;
 
             while (!bSorted)
             {
@@ -90,7 +90,7 @@ namespace FxUtility.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + 1]) > 0)
                     {
-                        Helper.Swap(ref arr[i], ref arr[i + 1]);
+                        Swap(ref arr[i], ref arr[i + 1]);
                         bSorted = false;
                     }
                 }
@@ -98,7 +98,7 @@ namespace FxUtility.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + 1]) > 0)
                     {
-                        Helper.Swap(ref arr[i], ref arr[i + 1]);
+                        Swap(ref arr[i], ref arr[i + 1]);
                         bSorted = false;
                     }
                 }
@@ -112,7 +112,7 @@ namespace FxUtility.Algorithms.Sorts
         public static void CombSort(T[] arr)
         {
             var gap = arr.Length;
-            bool bSwapped = false;
+            var bSwapped = false;
             const double shrinkFactor = 1.247330950103979;
             while (gap > 1 || bSwapped)
             {
@@ -123,7 +123,7 @@ namespace FxUtility.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + gap]) > 0)
                     {
-                        Helper.Swap(ref arr[i], ref arr[i + gap]);
+                        Swap(ref arr[i], ref arr[i + gap]);
                         bSwapped = true;
                     }
                     ++i;

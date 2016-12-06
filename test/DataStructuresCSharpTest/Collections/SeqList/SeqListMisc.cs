@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Xunit;
-using FxUtility.Collections;
 using System.Linq;
+using FclEx.Collections;
 
 namespace DataStructuresCSharpTest.Collections.SeqList
 {

@@ -1,4 +1,4 @@
-﻿using FxUtility.Collections;
+﻿using FclEx.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;

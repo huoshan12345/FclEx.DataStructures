@@ -1,7 +1,6 @@
 ﻿using System;
 using DataStructuresCSharpTest.Common;
 using Xunit;
-using FxUtility.Collections;
 using System.Linq;
 
 namespace DataStructuresCSharpTest.Collections.SeqList

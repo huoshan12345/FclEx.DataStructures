@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using FxUtility.Node;
+using FclEx.Node;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
-    public class AvlTreeNode<TKey, TValue> : BaseBinaryTreeNode<KeyValuePair<TKey, TValue>, AvlTreeNode<TKey, TValue>>
+    public class AvlTreeNode<TKey, TValue> : BinaryTreeNode<KeyValuePair<TKey, TValue>, AvlTreeNode<TKey, TValue>>
     {
 
         public int BalanceFactor { get; set; }
@@ -25,7 +25,7 @@ namespace FxUtility.Collections
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class AvlTree<TKey, TValue> : BaseBinarySearchTree<TKey, TValue, AvlTreeNode<TKey, TValue>>
+    public class AvlTree<TKey, TValue> : BinarySearchTree<TKey, TValue, AvlTreeNode<TKey, TValue>>
     {
         public AvlTree(IComparer<TKey> comparer = null) : base(comparer) { }
 

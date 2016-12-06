@@ -7,6 +7,7 @@ using Xunit;
 
 namespace DataStructuresCSharpTest.Common
 {
+    // ReSharper disable once InconsistentNaming
     public abstract class IDictionaryGenericTests<TKey, TValue> : ICollectionGenericTests<KeyValuePair<TKey, TValue>>
     {
         #region IDictionary<TKey, TValue> Helper Methods
@@ -77,12 +78,12 @@ namespace DataStructuresCSharpTest.Common
         /// Class to provide an indirection around a Key comparer. Allows us to use a key comparer as a KeyValuePair comparer
         /// by only looking at the key of a KeyValuePair.
         /// </summary>
-        public class KVPComparer : IEqualityComparer<KeyValuePair<TKey, TValue>>, IComparer<KeyValuePair<TKey, TValue>>
+        public class KvpComparer : IEqualityComparer<KeyValuePair<TKey, TValue>>, IComparer<KeyValuePair<TKey, TValue>>
         {
-            private IComparer<TKey> _comparer;
-            private IEqualityComparer<TKey> _equalityComparer;
+            private readonly IComparer<TKey> _comparer;
+            private readonly IEqualityComparer<TKey> _equalityComparer;
 
-            public KVPComparer(IComparer<TKey> comparer, IEqualityComparer<TKey> eq)
+            public KvpComparer(IComparer<TKey> comparer, IEqualityComparer<TKey> eq)
             {
                 _comparer = comparer;
                 _equalityComparer = eq;
@@ -139,12 +140,12 @@ namespace DataStructuresCSharpTest.Common
 
         protected override IEqualityComparer<KeyValuePair<TKey, TValue>> GetIEqualityComparer()
         {
-            return new KVPComparer(GetKeyIComparer(), GetKeyIEqualityComparer());
+            return new KvpComparer(GetKeyIComparer(), GetKeyIEqualityComparer());
         }
 
         protected override IComparer<KeyValuePair<TKey, TValue>> GetIComparer()
         {
-            return new KVPComparer(GetKeyIComparer(), GetKeyIEqualityComparer());
+            return new KvpComparer(GetKeyIComparer(), GetKeyIEqualityComparer());
         }
 
         /// <summary>

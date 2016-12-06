@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using FxUtility.Node;
+using FclEx.Node;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     public class LinkedStack<T> : IStack<T>, ILinearCollection<T>
     {

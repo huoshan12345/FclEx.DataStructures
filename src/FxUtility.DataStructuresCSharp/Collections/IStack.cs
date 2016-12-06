@@ -1,4 +1,4 @@
-﻿namespace FxUtility.Collections
+﻿namespace FclEx.Collections
 {
     public interface IStack<T>
     {

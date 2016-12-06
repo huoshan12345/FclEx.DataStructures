@@ -1,11 +1,11 @@
-﻿namespace FxUtility.Node
+﻿namespace FclEx.Node
 {
-    public class SingleLinkedListNode<T> : BaseNode<T, SingleLinkedListNode<T>>
+    public class SingleLinkedListNode<T> : Node<T, SingleLinkedListNode<T>>
     {
         public SingleLinkedListNode<T> Next
         {
-            get { return NeighborNodes[0]; }
-            set { NeighborNodes[0] = value; }
+            get { return Neighbors[0]; }
+            set { Neighbors[0] = value; }
         }
 
         public SingleLinkedListNode() : this(default(T), null) { }

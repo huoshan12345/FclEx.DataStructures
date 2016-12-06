@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     public abstract class BaseSeqCollection<T> : ILinearCollection<T>
     {

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     public class BaseKeyCollection<TKey, TValue> : BaseKeyOrValueCollection<TKey>
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     public interface ILinearCollection<T> : IReadOnlyCollection<T>
     {

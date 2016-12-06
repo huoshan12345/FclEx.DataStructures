@@ -2,21 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using FxUtility.Node;
+using FclEx.Node;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
-    public class DoublyLinkedListNode<T> : BaseNode<T, DoublyLinkedListNode<T>>
+    public class DoublyLinkedListNode<T> : Node<T, DoublyLinkedListNode<T>>
     {
         public DoublyLinkedListNode<T> Next
         {
-            get { return NeighborNodes[0]; }
-            set { NeighborNodes[0] = value; }
+            get { return Neighbors[0]; }
+            set { Neighbors[0] = value; }
         }
         public DoublyLinkedListNode<T> Prev
         {
-            get { return NeighborNodes[1]; }
-            set { NeighborNodes[1] = value; }
+            get { return Neighbors[1]; }
+            set { Neighbors[1] = value; }
         }
 
         public DoublyLinkedListNode() : this(default(T), null, null) { }

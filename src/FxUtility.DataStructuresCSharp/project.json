@@ -16,7 +16,7 @@
     }
   },
   "frameworks": {
-    "net451": {
+    "net461": {
     },
     "netcoreapp1.6": {
       "dependencies": {
@@ -24,10 +24,11 @@
           "version": "1.0.1",
           "type": "platform"
         },
-        "System.Diagnostics.Contracts": "4.0.1" 
+        "System.Diagnostics.Contracts": "4.3.0" 
       }
     }
   },
   "dependencies": {
+    "FclEx": "0.1.7-*"
   }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     public class OptimizedBTree<TKey, TValue> : IKeyValueCollection<TKey, TValue>
     {

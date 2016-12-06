@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using FxUtility.Collections;
 using DataStructuresCSharpTest.Common;
 using Xunit;
+using FclEx.Collections;
 
 namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
 {

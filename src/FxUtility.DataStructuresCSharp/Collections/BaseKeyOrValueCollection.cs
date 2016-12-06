@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     public abstract class BaseKeyOrValueCollection<T> : ICollection<T>, IReadOnlyCollection<T>
     {

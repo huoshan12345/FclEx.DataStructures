@@ -115,7 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BaseBinarySearchTree.hpp" />
+    <ClInclude Include="BinarySearchTree.hpp" />
     <ClInclude Include="BaseBinaryTreeNode.hpp" />
     <ClInclude Include="BaseNode.hpp" />
     <ClInclude Include="BinarySearchTreeNode.hpp" />

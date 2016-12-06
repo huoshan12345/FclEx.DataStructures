@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using FxUtility.Node;
+using FclEx.Node;
 
-namespace FxUtility.Collections
+namespace FclEx.Collections
 {
     public enum RedBlackTreeNodeColor : byte
     {
@@ -10,7 +10,7 @@ namespace FxUtility.Collections
         Black
     }
 
-    public class RedBlackTreeNode<TKey, TValue> : BaseBinaryTreeNode<KeyValuePair<TKey, TValue>, RedBlackTreeNode<TKey, TValue>>
+    public class RedBlackTreeNode<TKey, TValue> : BinaryTreeNode<KeyValuePair<TKey, TValue>, RedBlackTreeNode<TKey, TValue>>
     {
         public bool IsRed => Color == RedBlackTreeNodeColor.Red;
         public bool IsBlack => Color == RedBlackTreeNodeColor.Black;
@@ -31,7 +31,7 @@ namespace FxUtility.Collections
         public void SetRed() => Color = RedBlackTreeNodeColor.Red;
     }
 
-    public class RedBlackTree<TKey, TValue> : BaseBinarySearchTree<TKey, TValue, RedBlackTreeNode<TKey, TValue>>
+    public class RedBlackTree<TKey, TValue> : BinarySearchTree<TKey, TValue, RedBlackTreeNode<TKey, TValue>>
     {
         public RedBlackTree(IComparer<TKey> comparer = null) : base(comparer) { }
 

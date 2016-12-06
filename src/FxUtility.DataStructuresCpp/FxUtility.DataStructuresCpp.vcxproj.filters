@@ -33,9 +33,6 @@
     <ClInclude Include="HuffmanTreeEncoder.h">
       <Filter>Algorithms\HuffmanTree</Filter>
     </ClInclude>
-    <ClInclude Include="BaseBinarySearchTree.hpp">
-      <Filter>Collections</Filter>
-    </ClInclude>
     <ClInclude Include="BaseBinaryTreeNode.hpp">
       <Filter>Node</Filter>
     </ClInclude>
@@ -85,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="NonCopyable.hpp">
       <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="BinarySearchTree.hpp">
+      <Filter>Collections</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
