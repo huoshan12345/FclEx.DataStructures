@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+  <Type Name="FclEx::Collections::SkipList&lt;*,*&gt;">
+    <DisplayString>{{size={_count}}}</DisplayString>
+    <Expand>
+      <LinkedListItems>
+        <HeadPointer>_head->_neighborNodes[0]</HeadPointer>
+        <NextPointer>_neighborNodes[0]</NextPointer>
+        <ValueNode>Item</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="FclEx::Collections::SkipListNode&lt;*,*&gt;">
+    <DisplayString IncludeView="noparens">{Item.first}, {Item.second}</DisplayString>
+    <DisplayString ExcludeView="noparens">({Item.first}, {Item.second})</DisplayString>
+    <Expand>
+      <Item Name="Key">Item.first</Item>
+      <Item Name="Value">Item.second</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="FclEx::Node::Iterator&lt;*,*&gt;">
+    <DisplayString Condition="_pNode != nullptr">{_pNode->Item}</DisplayString>
+    <DisplayString Condition="_pNode == nullptr">end</DisplayString>
+    <Expand>
+      <Item Condition="_pNode != nullptr" Name="Item">_pNode->Item</Item>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>

@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "FxUtility.DataStructuresCSharp": "0.1.1-beta",
+    "FclEx.DataStructuresCSharp": "0.1.1-beta",
     "dotnet-test-xunit": "2.2.0-preview3-build1047",
     "xunit": "2.2.0-beta4-build3444"
   },
