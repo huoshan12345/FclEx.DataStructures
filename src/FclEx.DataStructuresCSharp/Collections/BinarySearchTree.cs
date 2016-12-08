@@ -6,7 +6,7 @@ using FclEx.Node;
 
 namespace FclEx.Collections
 {
-    public abstract class BinarySearchTree<TKey, TValue, TNode> : IKeyValueCollection<TKey, TValue> where TNode : BinaryTreeNode<KeyValuePair<TKey, TValue>, TNode>
+    public abstract class BinarySearchTree<TKey, TValue, TNode> : IKeyValueCollection<TKey, TValue> where TNode : BinaryNode<KeyValuePair<TKey, TValue>, TNode>
     {
         protected virtual TNode Root { get; set; }
         protected int _count;
@@ -135,7 +135,7 @@ namespace FclEx.Collections
 
         public virtual ICollection<TValue> Values => new BaseValueCollection<TKey, TValue>(this);
 
-        public IEnumerable<TNode> PreOrderTraverse() => BinaryTreeNode<KeyValuePair<TKey, TValue>, TNode>.PreOrderTraverse(Root);
+        public IEnumerable<TNode> PreOrderTraverse() => BinaryNode<KeyValuePair<TKey, TValue>, TNode>.PreOrderTraverse(Root);
         public IEnumerable<TNode> PreOrderTraverseNonRec()
         {
             /*
@@ -161,7 +161,7 @@ namespace FclEx.Collections
             }
         }
 
-        public IEnumerable<TNode> InOrderTraverse() => BinaryTreeNode<KeyValuePair<TKey, TValue>, TNode>.InOrderTraverse(Root);
+        public IEnumerable<TNode> InOrderTraverse() => BinaryNode<KeyValuePair<TKey, TValue>, TNode>.InOrderTraverse(Root);
         public IEnumerable<TNode> InOrderTraverseNonRec()
         {
             /*
@@ -191,7 +191,7 @@ namespace FclEx.Collections
             }
         }
 
-        public IEnumerable<TNode> PostOrderTraverse() => BinaryTreeNode<KeyValuePair<TKey, TValue>, TNode>.PostOrderTraverse(Root);
+        public IEnumerable<TNode> PostOrderTraverse() => BinaryNode<KeyValuePair<TKey, TValue>, TNode>.PostOrderTraverse(Root);
         public IEnumerable<TNode> PostOrderTraverseNonRec()
         {
             // 后序遍历的非递归实现是三种遍历方式中最难的一种。因为在后序遍历中，
@@ -225,7 +225,7 @@ namespace FclEx.Collections
             }
         }
 
-        public IEnumerable<TNode> LayerTraverse()=> BinaryTreeNode<KeyValuePair<TKey, TValue>, TNode>.LayerTraverse(Root);
+        public IEnumerable<TNode> LayerTraverse()=> BinaryNode<KeyValuePair<TKey, TValue>, TNode>.LayerTraverse(Root);
 
         protected virtual IEnumerable<TNode> Traverse() => InOrderTraverse();
 
@@ -294,7 +294,7 @@ namespace FclEx.Collections
         }
     }
 
-    public class BinarySearchTreeNode<TKey, TValue> : BinaryTreeNode<KeyValuePair<TKey, TValue>, BinarySearchTreeNode<TKey, TValue>>
+    public class BinarySearchTreeNode<TKey, TValue> : BinaryNode<KeyValuePair<TKey, TValue>, BinarySearchTreeNode<TKey, TValue>>
     {
         public BinarySearchTreeNode(TKey key, TValue value, BinarySearchTreeNode<TKey, TValue> left = null,
             BinarySearchTreeNode<TKey, TValue> right = null, BinarySearchTreeNode<TKey, TValue> parent = null)

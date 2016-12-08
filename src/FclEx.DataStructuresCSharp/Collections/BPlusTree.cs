@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using System.Diagnostics;
 using System.Linq;
 
 namespace FclEx.Collections
@@ -88,8 +88,8 @@ namespace FclEx.Collections
                 var result = node.FindLastOfLessOrEqual(key);
                 if (result.Item1)
                 {
-                    var leaf = node.IsLeafNode ? new Tuple<BPlusTreeNode, int>(node, result.Item2)
-                        : new Tuple<BPlusTreeNode, int>(node.Children[result.Item2].GetMinLeafNode(), 0);
+                    var leaf = node.IsLeafNode ? Tuple.Create(node, result.Item2)
+                        : Tuple.Create(node.Children[result.Item2].GetMinLeafNode(), 0);
                     return (checkValue && !_valueComparer.Equals(leaf.Item1.Values[leaf.Item2], value)) ? null : leaf;
                 }
                 if (result.Item2 < 0 || node.IsLeafNode) return null;
@@ -106,8 +106,8 @@ namespace FclEx.Collections
             {
                 var result = node.FindLastOfLessOrEqual(key);
                 if (result.Item1) throw new ArgumentException($"An item with the same key has already been added. Key: {key}");
-                if (result.Item2 < 0) return new Tuple<BPlusTreeNode, int>(node.GetMinLeafNode(), 0);
-                if (node.IsLeafNode) return new Tuple<BPlusTreeNode, int>(node, result.Item2 + 1);
+                if (result.Item2 < 0) return Tuple.Create(node.GetMinLeafNode(), 0);
+                if (node.IsLeafNode) return Tuple.Create(node, result.Item2 + 1);
                 else node = node.Children[result.Item2];
             }
         }
@@ -224,7 +224,7 @@ namespace FclEx.Collections
 
         private void RemoveItem(BPlusTreeNode node, int index)
         {
-            Contract.Ensures(node.IsLeafNode);
+            Debug.Assert(node.IsLeafNode);
             node.RemoveKeyValue(index);
             // update the index of a node in its parent.
             if (index == 0 && node != _root) UpdateIndex(node);
@@ -235,12 +235,12 @@ namespace FclEx.Collections
 
         private void RebalanceForDeletion(BPlusTreeNode node)
         {
-            Contract.Ensures(node != null);
-            Contract.Ensures(node != _root && node.KeyNum < MinKeyNum, $"{nameof(node)} does not need to rebalance");
+            Debug.Assert(node != null);
+            Debug.Assert(node != _root && node.KeyNum < MinKeyNum, $"{nameof(node)} does not need to rebalance");
             var parent = node.Parent;
-            Contract.Ensures(parent != null);
+            Debug.Assert(parent != null);
             var childIndex = node.ChildIndex;
-            Contract.Ensures(childIndex >= 0 && parent.Children[childIndex] == node, "pointers between child and parent are not correct");
+            Debug.Assert(childIndex >= 0 && parent.Children[childIndex] == node, "pointers between child and parent are not correct");
 
             var leftSiblingIndex = childIndex - 1;
             var rightSiblingIndex = childIndex + 1;
@@ -291,13 +291,13 @@ namespace FclEx.Collections
             else if (leftSiblingIndex >= 0) MergeNodes(parent.Children[leftSiblingIndex]);
             else
             {
-                Contract.Ensures(false, "cannot reach here!");
+                Debug.Assert(false, "cannot reach here!");
             }
         }
 
         private void MergeNodes(BPlusTreeNode node)
         {
-            Contract.Ensures(node != null);
+            Debug.Assert(node != null);
             var parent = node.Parent;
             var right = node.MergeWithRight();
             var rightIndex = right.ChildIndex;
@@ -342,7 +342,7 @@ namespace FclEx.Collections
 
         private void UpdateIndex(BPlusTreeNode node)
         {
-            Contract.Ensures(node.IsLeafNode);
+            Debug.Assert(node.IsLeafNode);
             var p = node;
             while (p != _root)
             {
@@ -354,7 +354,7 @@ namespace FclEx.Collections
 
         private void SplitNode(BPlusTreeNode node)
         {
-            Contract.Ensures(node != null);
+            Debug.Assert(node != null);
             var slibing = node.Split();
             if (node == _root)
             {
@@ -367,8 +367,8 @@ namespace FclEx.Collections
             else
             {
                 var parent = node.Parent;
-                Contract.Ensures(parent != null);
-                Contract.Ensures(node.ChildIndex >= 0 && node.ChildIndex < parent.KeyNum);
+                Debug.Assert(parent != null);
+                Debug.Assert(node.ChildIndex >= 0 && node.ChildIndex < parent.KeyNum);
                 parent.InsertKeyChild(slibing.Keys[0], slibing, node.ChildIndex + 1);
                 if (parent.IsKeyFull) SplitNode(parent);
             }
@@ -419,7 +419,7 @@ namespace FclEx.Collections
             var p = _firstLeafNode;
             while (p != null)
             {
-                Contract.Ensures(p.IsLeafNode);
+                Debug.Assert(p.IsLeafNode);
                 for (var i = 0; i < p.KeyNum; i++)
                 {
                     yield return new KeyValuePair<TKey, TValue>(p.Keys[i], p.Values[i]);
@@ -456,10 +456,10 @@ namespace FclEx.Collections
 
             public void InsertKeyValue(TKey key, TValue value, int index)
             {
-                Contract.Ensures(key != null);
-                Contract.Ensures(index >= 0 && index <= KeyNum);
-                Contract.Ensures(IsLeafNode);
-                Contract.Ensures(KeyNum + 1 <= _tree.MaxKeyNum);
+                Debug.Assert(key != null);
+                Debug.Assert(index >= 0 && index <= KeyNum);
+                Debug.Assert(IsLeafNode);
+                Debug.Assert(KeyNum + 1 <= _tree.MaxKeyNum);
                 if (KeyNum + 1 > _tree.MinKeyNum)
                 {
                     Array.Resize(ref _keys, _tree.MaxKeyNum);
@@ -477,9 +477,9 @@ namespace FclEx.Collections
 
             public void RemoveKeyValue(int index)
             {
-                Contract.Ensures(index >= 0 && index < KeyNum);
-                Contract.Ensures(IsLeafNode);
-                Contract.Ensures(this == _tree._root || KeyNum >= _tree.MinKeyNum);
+                Debug.Assert(index >= 0 && index < KeyNum);
+                Debug.Assert(IsLeafNode);
+                Debug.Assert(this == _tree._root || KeyNum >= _tree.MinKeyNum);
                 if (index < KeyNum - 1)
                 {
                     Array.Copy(_keys, index + 1, _keys, index, KeyNum - index - 1);
@@ -492,14 +492,14 @@ namespace FclEx.Collections
 
             public BPlusTreeNode MergeWithRight()
             {
-                Contract.Ensures(Parent != null);
-                Contract.Ensures(ChildIndex >= 0 && ChildIndex < Parent.KeyNum - 1);
-                Contract.Ensures(Parent.Children[ChildIndex] == this);
+                Debug.Assert(Parent != null);
+                Debug.Assert(ChildIndex >= 0 && ChildIndex < Parent.KeyNum - 1);
+                Debug.Assert(Parent.Children[ChildIndex] == this);
                 var siblingIndex = ChildIndex + 1;
                 var sibling = Parent.Children[siblingIndex];
-                Contract.Ensures(KeyNum < _tree.MinKeyNum && sibling.KeyNum == _tree.MinKeyNum
+                Debug.Assert(KeyNum < _tree.MinKeyNum && sibling.KeyNum == _tree.MinKeyNum
                     || KeyNum == _tree.MinKeyNum && sibling.KeyNum < _tree.MinKeyNum);
-                Contract.Ensures(sibling.Parent == Parent);
+                Debug.Assert(sibling.Parent == Parent);
                 if (Keys.Length < _tree.MaxKeyNum) Array.Resize(ref _keys, _tree.MaxKeyNum);
                 Array.Copy(sibling._keys, 0, _keys, KeyNum, sibling.KeyNum);
                 if (IsLeafNode)
@@ -524,11 +524,11 @@ namespace FclEx.Collections
 
             public void InsertKeyChild(TKey key, BPlusTreeNode node, int index)
             {
-                Contract.Ensures(key != null);
-                Contract.Ensures(node != null);
-                Contract.Ensures(index >= 0 && index <= KeyNum);
-                Contract.Ensures(!IsLeafNode);
-                Contract.Ensures(KeyNum + 1 <= _tree.MaxKeyNum);
+                Debug.Assert(key != null);
+                Debug.Assert(node != null);
+                Debug.Assert(index >= 0 && index <= KeyNum);
+                Debug.Assert(!IsLeafNode);
+                Debug.Assert(KeyNum + 1 <= _tree.MaxKeyNum);
 
                 if (KeyNum + 1 > _tree.MinKeyNum)
                 {
@@ -555,9 +555,9 @@ namespace FclEx.Collections
 
             public void RemoveKeyChild(int index)
             {
-                Contract.Ensures(index >= 0 && index < KeyNum);
-                Contract.Ensures(!IsLeafNode);
-                Contract.Ensures(this != _tree._root && KeyNum >= _tree.MinKeyNum || this == _tree._root && KeyNum >= 2);
+                Debug.Assert(index >= 0 && index < KeyNum);
+                Debug.Assert(!IsLeafNode);
+                Debug.Assert(this != _tree._root && KeyNum >= _tree.MinKeyNum || this == _tree._root && KeyNum >= 2);
                 if (index < KeyNum - 1)
                 {
                     Array.Copy(_keys, index + 1, _keys, index, KeyNum - index - 1);
@@ -599,7 +599,7 @@ namespace FclEx.Collections
 
             public Tuple<bool, int> FindLastOfLessOrEqual(TKey key)
             {
-                Contract.Ensures(key != null);
+                Debug.Assert(key != null);
                 var low = -1;
                 var high = KeyNum - 1;
                 while (low < high)
@@ -607,10 +607,10 @@ namespace FclEx.Collections
                     var mid = (low + high + 1) >> 1;
                     var cmp = _tree._comparer.Compare(Keys[mid], key);
                     if (cmp < 0) low = mid;
-                    else if (cmp == 0) return new Tuple<bool, int>(true, mid);
+                    else if (cmp == 0) return Tuple.Create(true, mid);
                     else high = mid - 1;
                 }
-                return new Tuple<bool, int>(low >= 0 && _tree._comparer.Compare(Keys[low], key) == 0, low);
+                return Tuple.Create(low >= 0 && _tree._comparer.Compare(Keys[low], key) == 0, low);
             }
 
             public BPlusTreeNode GetMinLeafNode()
@@ -635,8 +635,8 @@ namespace FclEx.Collections
 
             public BPlusTreeNode Split()
             {
-                Contract.Ensures(IsKeyFull);
-                Contract.Ensures(_keys != null);
+                Debug.Assert(IsKeyFull);
+                Debug.Assert(_keys != null);
 
                 var newNode = new BPlusTreeNode(_tree, IsLeafNode);
                 Array.Copy(_keys, _tree.MinKeyNum, newNode._keys, 0, _tree.MinKeyNum);
@@ -645,14 +645,14 @@ namespace FclEx.Collections
 
                 if (IsLeafNode)
                 {
-                    Contract.Ensures(_values != null);
+                    Debug.Assert(_values != null);
                     Array.Copy(_values, _tree.MinKeyNum, newNode._values, 0, _tree.MinKeyNum);
                     Array.Clear(_values, _tree.MinKeyNum, _tree.MinKeyNum);
                     // Array.Resize(ref _values, _tree.MinKeyNum);
                 }
                 else
                 {
-                    Contract.Ensures(_children != null);
+                    Debug.Assert(_children != null);
                     Array.Copy(_children, _tree.MinKeyNum, newNode._children, 0, _tree.MinKeyNum);
                     for (var i = 0; i < _tree.MinKeyNum; i++)
                     {

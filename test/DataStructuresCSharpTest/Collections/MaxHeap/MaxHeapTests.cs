@@ -58,7 +58,7 @@ namespace DataStructuresCSharpTest.Collections.MaxHeap
 
         [Theory]
         [MemberData(nameof(EnumerableTestData))]
-        public void heap_Generic_Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
+        public void Generic_Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
         {
             var arr = CreateEnumerable(enumerableType, null, enumerableLength, 0, numberOfDuplicateElements).ToArray();
             var heap = new MaxHeap<T>(arr, Comparer<T>.Default);
@@ -72,7 +72,7 @@ namespace DataStructuresCSharpTest.Collections.MaxHeap
         }
 
         [Fact]
-        public void heap_Generic_Constructor_IEnumerable_Null_ThrowsArgumentNullException()
+        public void Generic_Constructor_IEnumerable_Null_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("collection", () => new MaxHeap<T>(null));
         }

@@ -51,7 +51,7 @@ namespace DataStructuresCSharpTest.Collections.SeqStack
 
         [Theory]
         [MemberData(nameof(EnumerableTestData))]
-        public void Stack_Generic_Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
+        public void Generic_Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
         {
             var enumerable = CreateEnumerable(enumerableType, null, enumerableLength, 0, numberOfDuplicateElements);
             var stack = new SeqStack<T>(enumerable);
@@ -59,7 +59,7 @@ namespace DataStructuresCSharpTest.Collections.SeqStack
         }
 
         [Fact]
-        public void Stack_Generic_Constructor_IEnumerable_Null_ThrowsArgumentNullException()
+        public void Generic_Constructor_IEnumerable_Null_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("collection", () => new SeqStack<T>(null));
         }
@@ -70,14 +70,14 @@ namespace DataStructuresCSharpTest.Collections.SeqStack
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Stack_Generic_Constructor_int(int count)
+        public void Generic_Constructor_int(int count)
         {
             var stack = new SeqStack<T>(count);
             Assert.Equal(new T[0], stack.ToArray());
         }
 
         [Fact]
-        public void Stack_Generic_Constructor_int_Negative_ThrowsArgumentOutOfRangeException()
+        public void Generic_Constructor_int_Negative_ThrowsArgumentOutOfRangeException()
         {
             Assert.Throws<ArgumentOutOfRangeException>("capacity", () => new SeqStack<T>(-1));
             Assert.Throws<ArgumentOutOfRangeException>("capacity", () => new SeqStack<T>(int.MinValue));

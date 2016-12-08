@@ -23,8 +23,7 @@
         "Microsoft.NETCore.App": {
           "version": "1.0.1",
           "type": "platform"
-        },
-        "System.Diagnostics.Contracts": "4.3.0" 
+        }
       }
     }
   },

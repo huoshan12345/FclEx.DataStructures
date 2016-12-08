@@ -2,7 +2,7 @@
 
 namespace FclEx.Node
 {
-    public abstract class BinaryTreeNode<T, TNode> : Node<T, TNode> where TNode : BinaryTreeNode<T, TNode>
+    public abstract class BinaryNode<T, TNode> : Node<T, TNode> where TNode : BinaryNode<T, TNode>
     {
         public bool OnlyHasLeftChild => LeftChild != null && RightChild == null;
         public bool OnlyHasRightChild => LeftChild == null && RightChild != null;
@@ -30,7 +30,7 @@ namespace FclEx.Node
 
         public TNode[] Children => Neighbors;
 
-        protected BinaryTreeNode(T item, TNode left = null, TNode right = null, TNode parent = null)
+        protected BinaryNode(T item, TNode left = null, TNode right = null, TNode parent = null)
             : base(3, item)
         {
             LeftChild = left;

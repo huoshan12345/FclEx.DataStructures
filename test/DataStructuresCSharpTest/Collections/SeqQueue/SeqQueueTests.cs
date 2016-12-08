@@ -53,7 +53,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(EnumerableTestData))]
-        public void Queue_Generic_Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
+        public void Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
         {
             var enumerable = CreateEnumerable(enumerableType, null, enumerableLength, 0, numberOfDuplicateElements);
             var queue = new SeqQueue<T>(enumerable);
@@ -61,7 +61,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
         }
 
         [Fact]
-        public void Queue_Generic_Constructor_IEnumerable_Null_ThrowsArgumentNullException()
+        public void Constructor_IEnumerable_Null_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("collection", () => new SeqQueue<T>(null));
         }
@@ -72,7 +72,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_Constructor_int(int count)
+        public void Constructor_int(int count)
         {
             var queue = new SeqQueue<T>(count);
             Assert.Equal(new T[0], queue.ToArray());
@@ -81,7 +81,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
         }
 
         [Fact]
-        public void Queue_Generic_Constructor_int_Negative_ThrowsArgumentOutOfRangeException()
+        public void Constructor_int_Negative_ThrowsArgumentOutOfRangeException()
         {
             Assert.Throws<ArgumentOutOfRangeException>("capacity", () => new SeqQueue<T>(-1));
             Assert.Throws<ArgumentOutOfRangeException>("capacity", () => new SeqQueue<T>(int.MinValue));
@@ -93,7 +93,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_Dequeue_AllElements(int count)
+        public void Dequeue_AllElements(int count)
         {
             var queue = GenericQueueFactory(count);
             var elements = queue.ToList();
@@ -102,7 +102,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
         }
 
         [Fact]
-        public void Queue_Generic_Dequeue_OnEmptyQueue_ThrowsInvalidOperationException()
+        public void Dequeue_OnEmptyQueue_ThrowsInvalidOperationException()
         {
             Assert.Throws<InvalidOperationException>(() => new SeqQueue<T>().Dequeue());
         }
@@ -111,7 +111,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
         [InlineData(0, 5)]
         [InlineData(1, 1)]
         [InlineData(3, 100)]
-        public void Queue_Generic_EnqueueAndDequeue(int capacity, int items)
+        public void EnqueueAndDequeue(int capacity, int items)
         {
             var seed = 53134;
             var q = new SeqQueue<T>(capacity);
@@ -149,7 +149,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_ToArray(int count)
+        public void ToArray(int count)
         {
             var queue = GenericQueueFactory(count);
             Assert.True(queue.ToArray().SequenceEqual(queue.ToArray<T>()));
@@ -157,7 +157,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_ToArray_NonWrappedQueue(int count)
+        public void ToArray_NonWrappedQueue(int count)
         {
             var collection = new SeqQueue<T>(count + 1);
             AddToCollection(collection, count);
@@ -172,7 +172,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_Peek_AllElements(int count)
+        public void Peek_AllElements(int count)
         {
             var queue = GenericQueueFactory(count);
             var elements = queue.ToList();
@@ -184,7 +184,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
         }
 
         [Fact]
-        public void Queue_Generic_Peek_OnEmptyQueue_ThrowsInvalidOperationException()
+        public void Peek_OnEmptyQueue_ThrowsInvalidOperationException()
         {
             Assert.Throws<InvalidOperationException>(() => new SeqQueue<T>().Peek());
         }
@@ -195,7 +195,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_TrimExcess_OnValidQueueThatHasntBeenRemovedFrom(int count)
+        public void TrimExcess_OnValidQueueThatHasntBeenRemovedFrom(int count)
         {
             var queue = GenericQueueFactory(count);
             queue.TrimExcess();
@@ -203,7 +203,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_TrimExcess_Repeatedly(int count)
+        public void TrimExcess_Repeatedly(int count)
         {
             var queue = GenericQueueFactory(count); ;
             var expected = queue.ToList();
@@ -215,7 +215,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_TrimExcess_AfterRemovingOneElement(int count)
+        public void TrimExcess_AfterRemovingOneElement(int count)
         {
             if (count > 0)
             {
@@ -232,7 +232,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_TrimExcess_AfterClearingAndAddingSomeElementsBack(int count)
+        public void TrimExcess_AfterClearingAndAddingSomeElementsBack(int count)
         {
             if (count > 0)
             {
@@ -250,7 +250,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_TrimExcess_AfterClearingAndAddingAllElementsBack(int count)
+        public void TrimExcess_AfterClearingAndAddingAllElementsBack(int count)
         {
             if (count > 0)
             {

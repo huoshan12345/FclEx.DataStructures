@@ -10,7 +10,7 @@ namespace FclEx.Collections
         Black
     }
 
-    public class RedBlackTreeNode<TKey, TValue> : BinaryTreeNode<KeyValuePair<TKey, TValue>, RedBlackTreeNode<TKey, TValue>>
+    public class RedBlackTreeNode<TKey, TValue> : BinaryNode<KeyValuePair<TKey, TValue>, RedBlackTreeNode<TKey, TValue>>
     {
         public bool IsRed => Color == RedBlackTreeNodeColor.Red;
         public bool IsBlack => Color == RedBlackTreeNodeColor.Black;

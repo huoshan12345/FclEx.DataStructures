@@ -214,3 +214,4 @@ ModelManifest.xml
 *.opendb
 /src/DataStructuresCSharp/BenchmarkDotNet.Artifacts/results
 /FxUtility.DataStructures.VC.db
+/FclEx.DataStructures.VC.db

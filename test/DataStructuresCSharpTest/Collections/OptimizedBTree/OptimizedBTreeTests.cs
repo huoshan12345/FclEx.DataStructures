@@ -20,7 +20,7 @@ namespace DataStructuresCSharpTest.Collections.OptimizedBTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void OptimizedBTree_Generic_Constructor_IDictionary(int count)
+        public void Generic_Constructor_IDictionary(int count)
         {
             var source = GenericIDictionaryFactory(count);
             IDictionary<TKey, TValue> copied = new OptimizedBTree<TKey, TValue>(source);
@@ -29,7 +29,7 @@ namespace DataStructuresCSharpTest.Collections.OptimizedBTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void OptimizedBTree_Generic_Constructor_IDictionary_IComparer(int count)
+        public void Generic_Constructor_IDictionary_IComparer(int count)
         {
             var comparer = GetKeyIComparer();
             var source = GenericIDictionaryFactory(count);
@@ -40,7 +40,7 @@ namespace DataStructuresCSharpTest.Collections.OptimizedBTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void OptimizedBTree_Generic_Constructor_IComparer(int count)
+        public void Generic_Constructor_IComparer(int count)
         {
             var comparer = GetKeyIComparer();
             var source = GenericIDictionaryFactory(count);
@@ -70,7 +70,7 @@ namespace DataStructuresCSharpTest.Collections.OptimizedBTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void OptimizedBTree_Generic_ContainsValue_NotPresent(int count)
+        public void OptimizedGeneric_ContainsValue_NotPresent(int count)
         {
             var dictionary = (OptimizedBTree<TKey, TValue>)GenericIDictionaryFactory(count);
             var seed = 4315;
@@ -82,7 +82,7 @@ namespace DataStructuresCSharpTest.Collections.OptimizedBTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void OptimizedBTree_Generic_ContainsValue_Present(int count)
+        public void OptimizedGeneric_ContainsValue_Present(int count)
         {
             var dictionary = (OptimizedBTree<TKey, TValue>)GenericIDictionaryFactory(count);
             var seed = 4315;
@@ -95,7 +95,7 @@ namespace DataStructuresCSharpTest.Collections.OptimizedBTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void OptimizedBTree_Generic_ContainsValue_DefaultValueNotPresent(int count)
+        public void OptimizedGeneric_ContainsValue_DefaultValueNotPresent(int count)
         {
             var dictionary = (OptimizedBTree<TKey, TValue>)GenericIDictionaryFactory(count);
             Assert.False(dictionary.ContainsValue(default(TValue)));
@@ -103,7 +103,7 @@ namespace DataStructuresCSharpTest.Collections.OptimizedBTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void OptimizedBTree_Generic_ContainsValue_DefaultValuePresent(int count)
+        public void OptimizedGeneric_ContainsValue_DefaultValuePresent(int count)
         {
             var dictionary = (OptimizedBTree<TKey, TValue>)GenericIDictionaryFactory(count);
             var seed = 4315;

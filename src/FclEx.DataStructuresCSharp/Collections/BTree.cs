@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -57,7 +58,7 @@ namespace FclEx.Collections
                 while (index < node.KeyNum)
                 {
                     var cmp = _comparer.Compare(node.Items[index].Key, key);
-                    if (cmp == 0) return (checkValue && !_valueComparer.Equals(node.Items[index].Value, value)) ? null : new Tuple<BTreeNode, int>(node, index);
+                    if (cmp == 0) return (checkValue && !_valueComparer.Equals(node.Items[index].Value, value)) ? null : Tuple.Create(node, index);
                     else if (cmp > 0) break;
                     else index++;
                 }
@@ -272,8 +273,8 @@ namespace FclEx.Collections
                 var leftMaxNode = FindMaxNode(left);
                 var rightMinNode = FindMinNode(right);
                 var successor = leftMaxNode.KeyNum > MinKeyNum // choose the successor in leftMaxNode
-                    ? new Tuple<BTreeNode, int>(leftMaxNode, leftMaxNode.KeyNum - 1)
-                    : new Tuple<BTreeNode, int>(rightMinNode, 0);
+                    ? Tuple.Create(leftMaxNode, leftMaxNode.KeyNum - 1)
+                    : Tuple.Create(rightMinNode, 0);
                 node.Items[itemIndex] = successor.Item1.Items[successor.Item2];
                 DeleteItem(successor.Item1, successor.Item2);
             }
@@ -281,7 +282,7 @@ namespace FclEx.Collections
 
         private static void DeleteItemAndChildFromNode(BTreeNode node, int itemIndex, int childIndex = -1)
         {
-            Contract.Ensures(itemIndex >= 0 && itemIndex < node.KeyNum, $"{nameof(itemIndex)} is out of range");
+            Debug.Assert(itemIndex >= 0 && itemIndex < node.KeyNum, $"{nameof(itemIndex)} is out of range");
             for (var i = itemIndex; i < node.KeyNum - 1; i++)
             {
                 node.Items[i] = node.Items[i + 1];
@@ -290,7 +291,7 @@ namespace FclEx.Collections
 
             if (!node.IsLeafNode)
             {
-                Contract.Ensures(childIndex >= 0 && childIndex <= node.KeyNum, $"{nameof(childIndex)} is out of range");
+                Debug.Assert(childIndex >= 0 && childIndex <= node.KeyNum, $"{nameof(childIndex)} is out of range");
                 if (node.Children[childIndex] != null) node.Children[childIndex].Parent = null;
                 for (var i = childIndex; i < node.KeyNum; i++)
                 {
@@ -303,7 +304,7 @@ namespace FclEx.Collections
 
         private static void InsertItemAndChildIntoNode(BTreeNode node, KeyValuePair<TKey, TValue> item, int itemInsertIndex, BTreeNode child = null, int childInsertIndex = -1)
         {
-            Contract.Ensures(itemInsertIndex >= 0 && itemInsertIndex <= node.KeyNum, $"{nameof(itemInsertIndex)} is out of range");
+            Debug.Assert(itemInsertIndex >= 0 && itemInsertIndex <= node.KeyNum, $"{nameof(itemInsertIndex)} is out of range");
             for (var i = node.KeyNum - 1; i >= itemInsertIndex; i--)
             {
                 node.Items[i + 1] = node.Items[i];
@@ -312,8 +313,8 @@ namespace FclEx.Collections
 
             if (!node.IsLeafNode)
             {
-                Contract.Ensures(child != null);
-                Contract.Ensures(childInsertIndex >= 0 && childInsertIndex <= node.KeyNum + 1, $"{nameof(childInsertIndex)} is out of range");
+                Debug.Assert(child != null);
+                Debug.Assert(childInsertIndex >= 0 && childInsertIndex <= node.KeyNum + 1, $"{nameof(childInsertIndex)} is out of range");
                 for (var i = node.KeyNum; i >= childInsertIndex; i--)
                 {
                     node.Children[i + 1] = node.Children[i];
@@ -326,10 +327,10 @@ namespace FclEx.Collections
 
         private void RebalanceForDeletion(BTreeNode node)
         {
-            Contract.Ensures(node != _root && node.KeyNum < MinKeyNum, $"{nameof(node)} does not need to rebalance");
+            Debug.Assert(node != _root && node.KeyNum < MinKeyNum, $"{nameof(node)} does not need to rebalance");
             var parent = node.Parent;
             var childIndex = node.GetChildIndex();
-            Contract.Ensures(childIndex >= 0, "pointers between child and parent are not correct");
+            Debug.Assert(childIndex >= 0, "pointers between child and parent are not correct");
 
             var rightSiblingIndex = childIndex + 1;
             var leftSiblingIndex = childIndex - 1;
@@ -379,19 +380,19 @@ namespace FclEx.Collections
             else if (leftSiblingIndex >= 0) MergeTwoNodes(parent, leftSiblingIndex);
             else
             {
-                Contract.Ensures(false, "cannot reach here!");
+                Debug.Assert(false, "cannot reach here!");
             }
         }
 
         private void MergeTwoNodes(BTreeNode parent, int leftIndex)
         {
-            Contract.Ensures(leftIndex >= 0 && leftIndex < parent.KeyNum, $"{nameof(leftIndex)} is out of range");
+            Debug.Assert(leftIndex >= 0 && leftIndex < parent.KeyNum, $"{nameof(leftIndex)} is out of range");
 
             var left = parent.Children[leftIndex];
             var right = parent.Children[leftIndex + 1];
 
-            Contract.Ensures(left.KeyNum <= MinKeyNum, $"{nameof(left)} has more than {MinKeyNum} items");
-            Contract.Ensures(right.KeyNum <= MinKeyNum, $"{nameof(right)} has more than {MinKeyNum} items");
+            Debug.Assert(left.KeyNum <= MinKeyNum, $"{nameof(left)} has more than {MinKeyNum} items");
+            Debug.Assert(right.KeyNum <= MinKeyNum, $"{nameof(right)} has more than {MinKeyNum} items");
 
             left.Items[left.KeyNum++] = parent.Items[leftIndex];
             for (var i = 0; i < right.KeyNum; i++)
@@ -422,7 +423,7 @@ namespace FclEx.Collections
 
         private static BTreeNode FindMinNode(BTreeNode node)
         {
-            Contract.Ensures(node != null);
+            Debug.Assert(node != null);
             var p = node;
             while (!p.IsLeafNode)
             {
@@ -433,7 +434,7 @@ namespace FclEx.Collections
 
         private static BTreeNode FindMaxNode(BTreeNode node)
         {
-            Contract.Ensures(node != null);
+            Debug.Assert(node != null);
             var p = node;
             while (!p.IsLeafNode)
             {
@@ -465,7 +466,7 @@ namespace FclEx.Collections
             {
                 if (!node.IsLeafNode)
                 {
-                    Contract.Ensures(node.Children[i] != null);
+                    Debug.Assert(node.Children[i] != null);
                     foreach (var n in InOrderTraverse(node.Children[i]))
                     {
                         yield return n;
@@ -476,7 +477,7 @@ namespace FclEx.Collections
             }
             if (!node.IsLeafNode)
             {
-                Contract.Ensures(node.Children[node.KeyNum] != null);
+                Debug.Assert(node.Children[node.KeyNum] != null);
                 foreach (var n in InOrderTraverse(node.Children[node.KeyNum]))
                 {
                     yield return n;

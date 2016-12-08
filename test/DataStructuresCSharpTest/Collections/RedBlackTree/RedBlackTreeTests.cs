@@ -23,7 +23,7 @@ namespace DataStructuresCSharpTest.Collections.RedBlackTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void RedBlackTree_Generic_Constructor_IDictionary(int count)
+        public void Generic_Constructor_IDictionary(int count)
         {
             var source = GenericIDictionaryFactory(count);
             IDictionary<TKey, TValue> copied = new RedBlackTree<TKey, TValue>(source);
@@ -32,7 +32,7 @@ namespace DataStructuresCSharpTest.Collections.RedBlackTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void RedBlackTree_Generic_Constructor_IDictionary_IComparer(int count)
+        public void Generic_Constructor_IDictionary_IComparer(int count)
         {
             var comparer = GetKeyIComparer();
             var source = GenericIDictionaryFactory(count);
@@ -43,7 +43,7 @@ namespace DataStructuresCSharpTest.Collections.RedBlackTree
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void RedBlackTree_Generic_Constructor_IComparer(int count)
+        public void Generic_Constructor_IComparer(int count)
         {
             var comparer = GetKeyIComparer();
             var source = GenericIDictionaryFactory(count);

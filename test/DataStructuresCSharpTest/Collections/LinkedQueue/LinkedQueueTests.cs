@@ -53,7 +53,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
 
         [Theory]
         [MemberData(nameof(EnumerableTestData))]
-        public void Queue_Generic_Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
+        public void Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
         {
             var enumerable = CreateEnumerable(enumerableType, null, enumerableLength, 0, numberOfDuplicateElements);
             var queue = new LinkedQueue<T>(enumerable);
@@ -61,7 +61,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
         }
 
         [Fact]
-        public void Queue_Generic_Constructor_IEnumerable_Null_ThrowsArgumentNullException()
+        public void Constructor_IEnumerable_Null_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("collection", () => new LinkedQueue<T>(null));
         }
@@ -72,7 +72,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_Constructor_int(int count)
+        public void Constructor_int(int count)
         {
             var queue = new LinkedQueue<T>();
             Assert.Equal(new T[0], queue.ToArray());
@@ -86,7 +86,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_Dequeue_AllElements(int count)
+        public void Dequeue_AllElements(int count)
         {
             var queue = GenericQueueFactory(count);
             var elements = queue.ToList();
@@ -95,7 +95,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
         }
 
         [Fact]
-        public void Queue_Generic_Dequeue_OnEmptyQueue_ThrowsInvalidOperationException()
+        public void Dequeue_OnEmptyQueue_ThrowsInvalidOperationException()
         {
             Assert.Throws<InvalidOperationException>(() => new LinkedQueue<T>().Dequeue());
         }
@@ -104,7 +104,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
         [InlineData(0, 5)]
         [InlineData(1, 1)]
         [InlineData(3, 100)]
-        public void Queue_Generic_EnqueueAndDequeue(int capacity, int items)
+        public void EnqueueAndDequeue(int capacity, int items)
         {
             var seed = 53134;
             var q = new LinkedQueue<T>();
@@ -142,7 +142,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_ToArray(int count)
+        public void ToArray(int count)
         {
             var queue = GenericQueueFactory(count);
             Assert.True(queue.ToArray().SequenceEqual(queue.ToArray<T>()));
@@ -150,7 +150,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_ToArray_NonWrappedQueue(int count)
+        public void ToArray_NonWrappedQueue(int count)
         {
             var collection = new LinkedQueue<T>();
             AddToCollection(collection, count);
@@ -165,7 +165,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
-        public void Queue_Generic_Peek_AllElements(int count)
+        public void Peek_AllElements(int count)
         {
             var queue = GenericQueueFactory(count);
             var elements = queue.ToList();
@@ -177,7 +177,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
         }
 
         [Fact]
-        public void Queue_Generic_Peek_OnEmptyQueue_ThrowsInvalidOperationException()
+        public void Peek_OnEmptyQueue_ThrowsInvalidOperationException()
         {
             Assert.Throws<InvalidOperationException>(() => new LinkedQueue<T>().Peek());
         }

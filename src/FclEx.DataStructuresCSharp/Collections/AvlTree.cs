@@ -4,7 +4,7 @@ using FclEx.Node;
 
 namespace FclEx.Collections
 {
-    public class AvlTreeNode<TKey, TValue> : BinaryTreeNode<KeyValuePair<TKey, TValue>, AvlTreeNode<TKey, TValue>>
+    public class AvlTreeNode<TKey, TValue> : BinaryNode<KeyValuePair<TKey, TValue>, AvlTreeNode<TKey, TValue>>
     {
 
         public int BalanceFactor { get; set; }

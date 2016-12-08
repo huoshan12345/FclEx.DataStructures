@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using System.Diagnostics;
 using System.Linq;
 using FclEx.Extensions;
 using FclEx.Node;
@@ -11,7 +11,7 @@ namespace FclEx.Algorithms
 
     public static class HuffmanTree
     {
-        private class HuffmanTreeNode : BinaryTreeNode<int, HuffmanTreeNode>, IComparable<HuffmanTreeNode>
+        private class HuffmanTreeNode : BinaryNode<int, HuffmanTreeNode>, IComparable<HuffmanTreeNode>
         {
             private readonly int _frequency;
             private readonly int _id;
@@ -82,7 +82,7 @@ namespace FclEx.Algorithms
 
             private static byte[] CompressFreqArray(int[] freqArray)
             {
-                Contract.Ensures(MaxLength == freqArray.Length);
+                Debug.Assert(MaxLength == freqArray.Length);
                 var byteDic = new Dictionary<byte, int>(MaxLength);
                 var ushortDic = new Dictionary<byte, int>(MaxLength);
                 var intDic = new Dictionary<byte, int>(MaxLength);
@@ -159,7 +159,7 @@ namespace FclEx.Algorithms
                     index += 4;
                     freqArray[itemIndex] = freq;
                 }
-                Contract.Ensures(index == datas.Length);
+                Debug.Assert(index == datas.Length);
                 return freqArray;
             }
 
@@ -189,7 +189,7 @@ namespace FclEx.Algorithms
                 var dataLength = BitConverter.ToInt32(datas, index);
                 index += 4;
                 var compressedFreqArray = datas.Skip(index).Take(headerLength - index).ToArray();
-                return new Tuple<int, int[], byte[]>(dataLength, DecompressFreqArray(compressedFreqArray), compressedFreqArray);
+                return Tuple.Create(dataLength, DecompressFreqArray(compressedFreqArray), compressedFreqArray);
             }
 
             private static Tuple<int, int[], byte[]> CreateHeader(byte[] datas)
@@ -197,7 +197,7 @@ namespace FclEx.Algorithms
                 var dataLength = datas.Length;
                 var freqArray = CreateFreqArray(datas);
                 var compressedFreqArray = CompressFreqArray(freqArray);
-                return new Tuple<int, int[], byte[]>(dataLength, freqArray, compressedFreqArray);
+                return Tuple.Create(dataLength, freqArray, compressedFreqArray);
             }
         }
 
@@ -255,7 +255,7 @@ namespace FclEx.Algorithms
                 nodeArr[i] = new HuffmanTreeNode(i, freqArray[i], i);
             }
             var priQueue = new SortedSet<HuffmanTreeNode>(nodeArr);
-            Contract.Ensures(priQueue.Count == nodeArr.Length);
+            Debug.Assert(priQueue.Count == nodeArr.Length);
             var leafNodeArr = new HuffmanTreeNode[MaxLength];
 
             var leafIndex = 0;
@@ -263,19 +263,19 @@ namespace FclEx.Algorithms
             while (priQueue.Count >= 2)
             {
                 var node1 = priQueue.Min();
-                if (!priQueue.Remove(node1)) Contract.Ensures(false);
+                if (!priQueue.Remove(node1)) Debug.Assert(false);
                 var node2 = priQueue.Min();
-                if (!priQueue.Remove(node2)) Contract.Ensures(false);
+                if (!priQueue.Remove(node2)) Debug.Assert(false);
                 if (node1.IsLeafNode) leafNodeArr[leafIndex++] = node1;
                 if (node2.IsLeafNode) leafNodeArr[leafIndex++] = node2;
-                if (!priQueue.Add(new HuffmanTreeNode(node1, node2, id++))) Contract.Ensures(false);
+                if (!priQueue.Add(new HuffmanTreeNode(node1, node2, id++))) Debug.Assert(false);
             }
 #if DEBUG
             var list = priQueue.Min().Traverse().ToList();
-            Contract.Ensures(list.Count == 2 * MaxLength - 1);
-            Contract.Ensures(list.Count(item => item.IsLeafNode) == MaxLength);
+            Debug.Assert(list.Count == 2 * MaxLength - 1);
+            Debug.Assert(list.Count(item => item.IsLeafNode) == MaxLength);
 #endif
-            return new Tuple<HuffmanTreeNode, HuffmanTreeNode[]>(priQueue.Min(), leafNodeArr);
+            return Tuple.Create(priQueue.Min(), leafNodeArr);
         }
 
         private static List<bool>[] BuildEncodingTable(IEnumerable<HuffmanTreeNode> leafNodeList)
@@ -291,7 +291,7 @@ namespace FclEx.Algorithms
 
         private static List<bool> GetCode(HuffmanTreeNode leafNode)
         {
-            Contract.Ensures(leafNode.IsLeafNode);
+            Debug.Assert(leafNode.IsLeafNode);
             var p = leafNode;
             var bits = new List<bool>();
             while (p.Parent != null)

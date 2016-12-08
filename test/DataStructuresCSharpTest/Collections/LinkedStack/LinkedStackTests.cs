@@ -57,7 +57,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedStack
 
         [Theory]
         [MemberData(nameof(EnumerableTestData))]
-        public void Stack_Generic_Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
+        public void Generic_Constructor_IEnumerable(EnumerableType enumerableType, int setLength, int enumerableLength, int numberOfMatchingElements, int numberOfDuplicateElements)
         {
             var enumerable = CreateEnumerable(enumerableType, null, enumerableLength, 0, numberOfDuplicateElements);
             var stack = new LinkedStack<T>(enumerable);
@@ -65,7 +65,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedStack
         }
 
         [Fact]
-        public void Stack_Generic_Constructor_IEnumerable_Null_ThrowsArgumentNullException()
+        public void Generic_Constructor_IEnumerable_Null_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("collection", () => new LinkedStack<T>(null));
         }
