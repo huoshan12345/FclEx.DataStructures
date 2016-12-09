@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using FclEx.Collections;
+using FclEx.Extensions;
 
 namespace FclEx
 {
@@ -142,7 +143,7 @@ namespace FclEx
             //new BPlusTree<int, int>(10),
         };
 
-        private static readonly Dictionary<string, Action<IDictionary<int, int>, KeyValuePair<int, int>[]>> Actions = 
+        private static readonly Dictionary<string, Action<IDictionary<int, int>, KeyValuePair<int, int>[]>> Actions =
             new Dictionary<string, Action<IDictionary<int, int>, KeyValuePair<int, int>[]>>()
         {
             { nameof(DicTests.Add), DicTests.Add},
@@ -196,6 +197,19 @@ namespace FclEx
 
         public static void Main(string[] args)
         {
+            var dic = Enumerable.Range(1, 11).ToDictionary(m => m, m => m);
+            var tree = new TwoFourTree<int, int>(dic);
+
+            PrintTree(tree.ToLayerItems());
+
+            foreach (var pair in dic)
+            {
+                tree.Remove(pair.Key);
+                PrintTree(tree.ToLayerItems());
+            }
+
+
+
             TestDics();
 
             Console.WriteLine("Press any key to continue...");
@@ -246,6 +260,22 @@ namespace FclEx
                 numbers = numbers.OrderBy(item => random.Next());
             }
             return numbers.ToArray();
+        }
+
+        public static void PrintTree<T>(IEnumerable<List<T[]>> layers)
+        {
+            foreach (var layer in layers)
+            {
+                PrintTreeLayer(layer);
+            }
+            Console.WriteLine();
+        }
+
+        public static void PrintTreeLayer<T>(List<T[]> layer)
+        {
+            var strs = layer.Select(m => $"[{string.Join(",", m)}]");
+            var str = string.Join(" ", strs);
+            Console.WriteLine(str);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace DataStructuresCSharpTest.Common
         protected override ICollection<T> GenericICollectionFactory(int count) => GenericISetFactory(count);
 
         protected override bool DuplicateValuesAllowed => false;
-        protected override bool DefaultValueWhenNotAllowed_Throws => false;
+        protected override bool DefaultValueWhenNotAllowedThrows => false;
 
         #endregion
 

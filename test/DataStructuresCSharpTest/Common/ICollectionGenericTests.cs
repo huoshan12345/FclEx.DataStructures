@@ -32,11 +32,12 @@ namespace DataStructuresCSharpTest.Common
             return collection;
         }
 
-        protected virtual bool DuplicateValuesAllowed { get { return true; } }
-        protected virtual bool DefaultValueWhenNotAllowed_Throws { get { return true; } }
-        protected virtual bool IsReadOnly { get { return false; } }
-        protected virtual bool DefaultValueAllowed { get { return true; } }
-        protected virtual IEnumerable<T> InvalidValues { get { return new T[0]; } }
+        protected virtual bool DuplicateValuesAllowed => true;
+        protected virtual bool DefaultValueWhenNotAllowedThrows => true;
+        protected virtual bool IsReadOnly => false;
+        protected virtual bool DefaultValueAllowed => true;
+        protected virtual IEnumerable<T> InvalidValues => new T[0];
+
         protected virtual void AddToCollection(ICollection<T> collection, int numberOfItemsToAdd)
         {
             var seed = 9600;
@@ -199,82 +200,72 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Add_AfterCallingClear(int count)
         {
-            if (!IsReadOnly)
-            {
-                var collection = GenericICollectionFactory(count);
-                collection.Clear();
-                AddToCollection(collection, 5);
-                Assert.Equal(5, collection.Count);
-            }
+            if (IsReadOnly) return;
+            var collection = GenericICollectionFactory(count);
+            collection.Clear();
+            AddToCollection(collection, 5);
+            Assert.Equal(5, collection.Count);
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Add_AfterRemovingAnyValue(int count)
         {
-            if (!IsReadOnly)
-            {
-                var seed = 840;
-                var collection = GenericICollectionFactory(count);
-                var items = collection.ToList();
-                var toAdd = CreateT(seed++);
-                while (collection.Contains(toAdd))
-                    toAdd = CreateT(seed++);
-                collection.Add(toAdd);
-                collection.Remove(toAdd);
-
+            if (IsReadOnly) return;
+            var seed = 840;
+            var collection = GenericICollectionFactory(count);
+            var items = collection.ToList();
+            var toAdd = CreateT(seed++);
+            while (collection.Contains(toAdd))
                 toAdd = CreateT(seed++);
-                while (collection.Contains(toAdd))
-                    toAdd = CreateT(seed++);
+            collection.Add(toAdd);
+            collection.Remove(toAdd);
 
-                collection.Add(toAdd);
-                items.Add(toAdd);
-                CollectionAsserts.EqualUnordered(items, collection);
-            }
+            toAdd = CreateT(seed++);
+            while (collection.Contains(toAdd))
+                toAdd = CreateT(seed++);
+
+            collection.Add(toAdd);
+            items.Add(toAdd);
+            CollectionAsserts.EqualUnordered(items, collection);
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Add_AfterRemovingAllItems(int count)
         {
-            if (!IsReadOnly)
-            {
-                var collection = GenericICollectionFactory(count);
-                var itemsToRemove = collection.ToList();
-                for (var i = 0; i < count; i++)
-                    collection.Remove(collection.ElementAt(0));
-                collection.Add(CreateT(254));
-                Assert.Equal(1, collection.Count);
-            }
+            if (IsReadOnly) return;
+            var collection = GenericICollectionFactory(count);
+            var itemsToRemove = collection.ToList();
+            for (var i = 0; i < count; i++)
+                collection.Remove(collection.ElementAt(0));
+            collection.Add(CreateT(254));
+            Assert.Equal(1, collection.Count);
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Add_ToReadOnlyCollection(int count)
         {
-            if (IsReadOnly)
-            {
-                var collection = GenericICollectionFactory(count);
-                Assert.Throws<NotSupportedException>(() => collection.Add(CreateT(0)));
-                Assert.Equal(count, collection.Count);
-            }
+            if (!IsReadOnly) return;
+            var collection = GenericICollectionFactory(count);
+            Assert.Throws<NotSupportedException>(() => collection.Add(CreateT(0)));
+            Assert.Equal(count, collection.Count);
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Add_AfterRemoving(int count)
         {
-            if (!IsReadOnly)
-            {
-                var seed = 840;
-                var collection = GenericICollectionFactory(count);
-                var toAdd = CreateT(seed++);
-                while (collection.Contains(toAdd))
-                    toAdd = CreateT(seed++);
-                collection.Add(toAdd);
-                collection.Remove(toAdd);
-                collection.Add(toAdd);
-            }
+            if (IsReadOnly) return;
+            var seed = 840;
+            var collection = GenericICollectionFactory(count);
+            var toAdd = CreateT(seed++);
+            while (collection.Contains(toAdd))
+                toAdd = CreateT(seed++);
+            collection.Add(toAdd);
+            collection.Remove(toAdd);
+            collection.Add(toAdd);
         }
 
         #endregion
@@ -396,7 +387,7 @@ namespace DataStructuresCSharpTest.Common
             var collection = GenericICollectionFactory(count);
             if (!DefaultValueAllowed && !IsReadOnly)
             {
-                if (DefaultValueWhenNotAllowed_Throws)
+                if (DefaultValueWhenNotAllowedThrows)
                     Assert.ThrowsAny<ArgumentNullException>(() => collection.Contains(default(T)));
                 else
                     Assert.False(collection.Contains(default(T)));
@@ -486,11 +477,9 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Remove_OnReadOnlyCollection_ThrowsNotSupportedException(int count)
         {
-            if (IsReadOnly)
-            {
-                var collection = GenericICollectionFactory(count);
-                Assert.Throws<NotSupportedException>(() => collection.Remove(CreateT(34543)));
-            }
+            if (!IsReadOnly) return;
+            var collection = GenericICollectionFactory(count);
+            Assert.Throws<NotSupportedException>(() => collection.Remove(CreateT(34543)));
         }
 
         [Theory]
@@ -516,16 +505,14 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Remove_NonDefaultValueNotContainedInCollection(int count)
         {
-            if (!IsReadOnly)
-            {
-                var seed = count * 251;
-                var collection = GenericICollectionFactory(count);
-                var value = CreateT(seed++);
-                while (collection.Contains(value) || InvalidValues.Contains(value))
-                    value = CreateT(seed++);
-                Assert.False(collection.Remove(value));
-                Assert.Equal(count, collection.Count);
-            }
+            if (IsReadOnly) return;
+            var seed = count * 251;
+            var collection = GenericICollectionFactory(count);
+            var value = CreateT(seed++);
+            while (collection.Contains(value) || InvalidValues.Contains(value))
+                value = CreateT(seed++);
+            Assert.False(collection.Remove(value));
+            Assert.Equal(count, collection.Count);
         }
 
         [Theory]
@@ -551,19 +538,17 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Remove_NonDefaultValueContainedInCollection(int count)
         {
-            if (!IsReadOnly)
+            if (IsReadOnly) return;
+            var seed = count * 251;
+            var collection = GenericICollectionFactory(count);
+            var value = CreateT(seed++);
+            if (!collection.Contains(value))
             {
-                var seed = count * 251;
-                var collection = GenericICollectionFactory(count);
-                var value = CreateT(seed++);
-                if (!collection.Contains(value))
-                {
-                    collection.Add(value);
-                    count++;
-                }
-                Assert.True(collection.Remove(value));
-                Assert.Equal(count - 1, collection.Count);
+                collection.Add(value);
+                count++;
             }
+            Assert.True(collection.Remove(value));
+            Assert.Equal(count - 1, collection.Count);
         }
 
         [Theory]
@@ -588,32 +573,27 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Remove_EveryValue(int count)
         {
-            if (!IsReadOnly)
+            if (IsReadOnly) return;
+            var collection = GenericICollectionFactory(count);
+            foreach (var value in collection.ToList())
             {
-                var collection = GenericICollectionFactory(count);
-                Assert.All(collection.ToList(), value =>
-                {
-                    Assert.True(collection.Remove(value));
-                });
-                Assert.Empty(collection);
+                Assert.True(collection.Remove(value));
             }
+            Assert.Empty(collection);
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void ICollection_Generic_Remove_EveryValue_Unordered(int count)
         {
-            if (!IsReadOnly)
+            if (IsReadOnly) return;
+            var collection = GenericICollectionFactory(count);
+            var list = collection.OrderBy(item=>item.GetHashCode()).ToList();
+            foreach (var t in list)
             {
-                var collection = GenericICollectionFactory(count);
-                var list = collection.OrderBy(item=>item.GetHashCode()).ToList();
-                for (var i = 0; i < list.Count; i++)
-                {
-                    Assert.True(collection.Remove(list[i]));
-                    if (i == 27) continue;
-                }
-                Assert.Empty(collection);
+                Assert.True(collection.Remove(t));
             }
+            Assert.Empty(collection);
         }
 
         [Theory]
@@ -625,9 +605,9 @@ namespace DataStructuresCSharpTest.Common
                 var collection = GenericICollectionFactory(count);
                 var arr = collection.ToArray();
                 Array.Reverse(arr);
-                for (int i = 0; i < arr.Length; i++)
+                foreach (var t in arr)
                 {
-                    Assert.True(collection.Remove(arr[i]));
+                    Assert.True(collection.Remove(t));
                 }
                 Assert.Empty(collection);
             }
@@ -638,10 +618,10 @@ namespace DataStructuresCSharpTest.Common
         public void ICollection_Generic_Remove_InvalidValue_ThrowsArgumentException(int count)
         {
             var collection = GenericICollectionFactory(count);
-            Assert.All(InvalidValues, value =>
+            foreach (var value in InvalidValues)
             {
                 Assert.ThrowsAny<ArgumentException>(() => collection.Remove(value));
-            });
+            }
             Assert.Equal(count, collection.Count);
         }
 
@@ -652,7 +632,7 @@ namespace DataStructuresCSharpTest.Common
             var collection = GenericICollectionFactory(count);
             if (!DefaultValueAllowed && !IsReadOnly)
             {
-                if (DefaultValueWhenNotAllowed_Throws)
+                if (DefaultValueWhenNotAllowedThrows)
                     Assert.ThrowsAny<ArgumentNullException>(() => collection.Remove(default(T)));
                 else
                     Assert.False(collection.Remove(default(T)));

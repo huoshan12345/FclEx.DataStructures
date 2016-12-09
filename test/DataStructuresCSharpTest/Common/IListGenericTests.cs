@@ -96,7 +96,7 @@ namespace DataStructuresCSharpTest.Common
 
         #region ICollection<T> Helper Methods
 
-        protected override bool DefaultValueWhenNotAllowed_Throws { get { return false; } }
+        protected override bool DefaultValueWhenNotAllowedThrows { get { return false; } }
 
         protected override ICollection<T> GenericICollectionFactory()
         {

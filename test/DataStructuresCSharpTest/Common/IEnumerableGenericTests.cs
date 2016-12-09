@@ -11,6 +11,7 @@ namespace DataStructuresCSharpTest.Common
     /// Contains tests that ensure the correctness of any class that implements the generic
     /// IEnumerable interface.
     /// </summary>
+    // ReSharper disable once InconsistentNaming
     public abstract class IEnumerableGenericTests<T> : TestBase<T>
     {
         #region IEnumerable<T> Helper Methods
@@ -84,8 +85,8 @@ namespace DataStructuresCSharpTest.Common
             Action<IEnumerator, T[], int> testCode,
             int iters = 3)
         {
-            IEnumerable<T> enumerable = GenericIEnumerableFactory(32);
-            T[] items = enumerable.ToArray();
+            var enumerable = GenericIEnumerableFactory(32);
+            var items = enumerable.ToArray();
             IEnumerator enumerator = enumerable.GetEnumerator();
             for (var i = 0; i < iters; i++)
             {
@@ -121,7 +122,7 @@ namespace DataStructuresCSharpTest.Common
             }
             else
             {
-                object current = enumerator.Current;
+                var current = enumerator.Current;
                 for (var i = 0; i < 3; i++)
                 {
                     Assert.Equal(expectedCurrent, current);
@@ -167,7 +168,7 @@ namespace DataStructuresCSharpTest.Common
             bool validateStart,
             bool validateEnd)
         {
-            bool needToMatchAllExpectedItems = count - startIndex
+            var needToMatchAllExpectedItems = count - startIndex
                                                == expectedItems.Length;
             if (validateStart)
             {
@@ -191,7 +192,7 @@ namespace DataStructuresCSharpTest.Common
                      iterations < count && enumerator.MoveNext();
                      iterations++)
                 {
-                    object currentItem = enumerator.Current;
+                    var currentItem = enumerator.Current;
                     var itemFound = false;
                     for (var i = 0; i < itemsVisited.Length; ++i)
                     {
@@ -213,7 +214,7 @@ namespace DataStructuresCSharpTest.Common
 
                     for (var i = 0; i < 3; i++)
                     {
-                        object tempItem = enumerator.Current;
+                        var tempItem = enumerator.Current;
                         Assert.Equal(currentItem, tempItem);
                     }
                 }
@@ -243,11 +244,11 @@ namespace DataStructuresCSharpTest.Common
                      iterations < count && enumerator.MoveNext();
                      iterations++)
                 {
-                    object currentItem = enumerator.Current;
+                    var currentItem = enumerator.Current;
                     Assert.Equal(expectedItems[iterations], currentItem);
                     for (var i = 0; i < 3; i++)
                     {
-                        object tempItem = enumerator.Current;
+                        var tempItem = enumerator.Current;
                         Assert.Equal(currentItem, tempItem);
                     }
                 }
@@ -289,7 +290,7 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_GetEnumerator_NoExceptionsWhileGetting(int count)
         {
-            IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
+            var enumerable = GenericIEnumerableFactory(count);
             enumerable.GetEnumerator().Dispose();
         }
 
@@ -298,11 +299,11 @@ namespace DataStructuresCSharpTest.Common
         public void IEnumerable_Generic_GetEnumerator_ReturnsUniqueEnumerator(int count)
         {
             //Tests that the enumerators returned by GetEnumerator operate independently of one another
-            IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-            int iterations = 0;
-            foreach (T item in enumerable)
-                foreach (T item2 in enumerable)
-                    foreach (T item3 in enumerable)
+            var enumerable = GenericIEnumerableFactory(count);
+            var iterations = 0;
+            foreach (var item in enumerable)
+                foreach (var item2 in enumerable)
+                    foreach (var item3 in enumerable)
                         iterations++;
             Assert.Equal(count * count * count, iterations);
         }
@@ -315,8 +316,8 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_MoveNext_FromStartToFinish(int count)
         {
-            int iterations = 0;
-            using (IEnumerator<T> enumerator = GenericIEnumerableFactory(count).GetEnumerator())
+            var iterations = 0;
+            using (var enumerator = GenericIEnumerableFactory(count).GetEnumerator())
             {
                 while (enumerator.MoveNext())
                     iterations++;
@@ -333,8 +334,8 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public virtual void Enumerator_MoveNext_AfterDisposal(int count)
         {
-            IEnumerator<T> enumerator = GenericIEnumerableFactory(count).GetEnumerator();
-            for (int i = 0; i < count; i++)
+            var enumerator = GenericIEnumerableFactory(count).GetEnumerator();
+            for (var i = 0; i < count; i++)
                 enumerator.MoveNext();
             enumerator.Dispose();
             Assert.False(enumerator.MoveNext());
@@ -344,9 +345,9 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_MoveNext_AfterEndOfCollection(int count)
         {
-            using (IEnumerator<T> enumerator = GenericIEnumerableFactory(count).GetEnumerator())
+            using (var enumerator = GenericIEnumerableFactory(count).GetEnumerator())
             {
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                     enumerator.MoveNext();
                 Assert.False(enumerator.MoveNext());
                 Assert.False(enumerator.MoveNext());
@@ -357,48 +358,48 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_MoveNext_ModifiedBeforeEnumeration_ThrowsInvalidOperationException(int count)
         {
-            Assert.All(ModifyEnumerables, ModifyEnumerable =>
+            foreach (var modifyEnumerable in ModifyEnumerables)
             {
-                IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-                using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+                var enumerable = GenericIEnumerableFactory(count);
+                using (var enumerator = enumerable.GetEnumerator())
                 {
-                    if (ModifyEnumerable(enumerable))
+                    if (modifyEnumerable(enumerable))
                         Assert.Throws<InvalidOperationException>(() => enumerator.MoveNext());
                 }
-            });
+            }
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_MoveNext_ModifiedDuringEnumeration_ThrowsInvalidOperationException(int count)
         {
-            Assert.All(ModifyEnumerables, ModifyEnumerable =>
+            foreach (var modifyEnumerable in ModifyEnumerables)
             {
-                IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-                using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+                var enumerable = GenericIEnumerableFactory(count);
+                using (var enumerator = enumerable.GetEnumerator())
                 {
-                    for (int i = 0; i < count / 2; i++)
+                    for (var i = 0; i < count / 2; i++)
                         enumerator.MoveNext();
-                    if (ModifyEnumerable(enumerable))
+                    if (modifyEnumerable(enumerable))
                         Assert.Throws<InvalidOperationException>(() => enumerator.MoveNext());
                 }
-            });
+            }
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_MoveNext_ModifiedAfterEnumeration_ThrowsInvalidOperationException(int count)
         {
-            Assert.All(ModifyEnumerables, ModifyEnumerable =>
+            foreach (var modifyEnumerable in ModifyEnumerables)
             {
-                IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-                using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+                var enumerable = GenericIEnumerableFactory(count);
+                using (var enumerator = enumerable.GetEnumerator())
                 {
-                    while (enumerator.MoveNext()) ;
-                    if (ModifyEnumerable(enumerable))
+                    while (enumerator.MoveNext()) { }
+                    if (modifyEnumerable(enumerable))
                         Assert.Throws<InvalidOperationException>(() => enumerator.MoveNext());
                 }
-            });
+            }
         }
 
         [Fact]
@@ -479,11 +480,11 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_Current_ReturnsSameValueOnRepeatedCalls(int count)
         {
-            using (IEnumerator<T> enumerator = GenericIEnumerableFactory(count).GetEnumerator())
+            using (var enumerator = GenericIEnumerableFactory(count).GetEnumerator())
             {
                 while (enumerator.MoveNext())
                 {
-                    T current = enumerator.Current;
+                    var current = enumerator.Current;
                     Assert.Equal(current, enumerator.Current);
                     Assert.Equal(current, enumerator.Current);
                     Assert.Equal(current, enumerator.Current);
@@ -497,15 +498,15 @@ namespace DataStructuresCSharpTest.Common
         {
             // Ensures that the elements returned from enumeration are exactly the same collection of
             // elements returned from a previous enumeration
-            IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-            Dictionary<T, int> firstValues = new Dictionary<T, int>(count);
-            Dictionary<T, int> secondValues = new Dictionary<T, int>(count);
-            foreach (T item in enumerable)
+            var enumerable = GenericIEnumerableFactory(count);
+            var firstValues = new Dictionary<T, int>(count);
+            var secondValues = new Dictionary<T, int>(count);
+            foreach (var item in enumerable)
                 firstValues[item] = firstValues.ContainsKey(item) ? firstValues[item]++ : 1;
-            foreach (T item in enumerable)
+            foreach (var item in enumerable)
                 secondValues[item] = secondValues.ContainsKey(item) ? secondValues[item]++ : 1;
             Assert.Equal(firstValues.Count, secondValues.Count);
-            foreach (T key in firstValues.Keys)
+            foreach (var key in firstValues.Keys)
                 Assert.Equal(firstValues[key], secondValues[key]);
         }
 
@@ -514,8 +515,8 @@ namespace DataStructuresCSharpTest.Common
         public void IEnumerable_Generic_Enumerator_Current_BeforeFirstMoveNext_UndefinedBehavior(int count)
         {
             T current;
-            IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-            using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+            var enumerable = GenericIEnumerableFactory(count);
+            using (var enumerator = enumerable.GetEnumerator())
             {
                 if (EnumeratorCurrentUndefinedOperationThrows)
                     Assert.Throws<InvalidOperationException>(() => enumerator.Current);
@@ -528,17 +529,17 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_Current_AfterEndOfEnumerable_UndefinedBehavior(int count)
         {
-            IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-            using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+            var enumerable = GenericIEnumerableFactory(count);
+            using (var enumerator = enumerable.GetEnumerator())
             {
                 while (enumerator.MoveNext()) ;
                 if (EnumeratorCurrentUndefinedOperationThrows)
                     Assert.Throws<InvalidOperationException>(() => enumerator.Current);
                 else
                 {
-                    T current = enumerator.Current;
+                    var current = enumerator.Current;
                 }
-                   
+
             }
         }
 
@@ -546,21 +547,22 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_Current_ModifiedDuringEnumeration_UndefinedBehavior(int count)
         {
-            Assert.All(ModifyEnumerables, ModifyEnumerable =>
+            foreach (var modifyEnumerable in ModifyEnumerables)
             {
-                T current;
-                IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-                using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+                var enumerable = GenericIEnumerableFactory(count);
+                using (var enumerator = enumerable.GetEnumerator())
                 {
-                    if (ModifyEnumerable(enumerable))
+                    if (modifyEnumerable(enumerable))
                     {
                         if (EnumeratorCurrentUndefinedOperationThrows)
                             Assert.Throws<InvalidOperationException>(() => enumerator.Current);
                         else
-                            current = enumerator.Current;
+                        {
+                            var current = enumerator.Current;
+                        }
                     }
                 }
-            });
+            }
         }
 
         #endregion
@@ -571,7 +573,7 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_Reset_BeforeIteration_Support(int count)
         {
-            using (IEnumerator<T> enumerator = GenericIEnumerableFactory(count).GetEnumerator())
+            using (var enumerator = GenericIEnumerableFactory(count).GetEnumerator())
             {
                 if (ResetImplemented)
                     enumerator.Reset();
@@ -584,48 +586,48 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_Reset_ModifiedBeforeEnumeration_ThrowsInvalidOperationException(int count)
         {
-            Assert.All(ModifyEnumerables, ModifyEnumerable =>
+            foreach (var modifyEnumerable in ModifyEnumerables)
             {
-                IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-                using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+                var enumerable = GenericIEnumerableFactory(count);
+                using (var enumerator = enumerable.GetEnumerator())
                 {
-                    if (ModifyEnumerable(enumerable))
+                    if (modifyEnumerable(enumerable))
                         Assert.Throws<InvalidOperationException>(() => enumerator.Reset());
                 }
-            });
+            }
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_Reset_ModifiedDuringEnumeration_ThrowsInvalidOperationException(int count)
         {
-            Assert.All(ModifyEnumerables, ModifyEnumerable =>
+            foreach (var modifyEnumerable in ModifyEnumerables)
             {
-                IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-                using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+                var enumerable = GenericIEnumerableFactory(count);
+                using (var enumerator = enumerable.GetEnumerator())
                 {
-                    for (int i = 0; i < count / 2; i++)
+                    for (var i = 0; i < count / 2; i++)
                         enumerator.MoveNext();
-                    if (ModifyEnumerable(enumerable))
+                    if (modifyEnumerable(enumerable))
                         Assert.Throws<InvalidOperationException>(() => enumerator.Reset());
                 }
-            });
+            }
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void IEnumerable_Generic_Enumerator_Reset_ModifiedAfterEnumeration_ThrowsInvalidOperationException(int count)
         {
-            Assert.All(ModifyEnumerables, ModifyEnumerable =>
+            foreach (var modifyEnumerable in ModifyEnumerables)
             {
-                IEnumerable<T> enumerable = GenericIEnumerableFactory(count);
-                using (IEnumerator<T> enumerator = enumerable.GetEnumerator())
+                var enumerable = GenericIEnumerableFactory(count);
+                using (var enumerator = enumerable.GetEnumerator())
                 {
-                    while (enumerator.MoveNext()) ;
-                    if (ModifyEnumerable(enumerable))
+                    while (enumerator.MoveNext()) { }
+                    if (modifyEnumerable(enumerable))
                         Assert.Throws<InvalidOperationException>(() => enumerator.Reset());
                 }
-            });
+            }
         }
 
         [Fact]

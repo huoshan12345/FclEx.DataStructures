@@ -650,62 +650,54 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IDictionary_Generic_RemoveKey_EveryKey(int count)
         {
-            if (!IsReadOnly)
+            if (IsReadOnly) return;
+            var dictionary = GenericIDictionaryFactory(count);
+            foreach (var key in dictionary.Keys.ToList())
             {
-                var dictionary = GenericIDictionaryFactory(count);
-                Assert.All(dictionary.Keys.ToList(), key =>
-                {
-                    Assert.True(dictionary.Remove(key));
-                });
-                Assert.Empty(dictionary);
+                Assert.True(dictionary.Remove(key));
             }
+            Assert.Empty(dictionary);
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void IDictionary_Generic_RemoveKey_ValidKeyNotContainedInDictionary(int count)
         {
-            if (!IsReadOnly)
-            {
-                var dictionary = GenericIDictionaryFactory(count);
-                var missingKey = GetNewKey(dictionary);
-                Assert.False(dictionary.Remove(missingKey));
-                Assert.Equal(count, dictionary.Count);
-            }
+            if (IsReadOnly) return;
+            var dictionary = GenericIDictionaryFactory(count);
+            var missingKey = GetNewKey(dictionary);
+            Assert.False(dictionary.Remove(missingKey));
+            Assert.Equal(count, dictionary.Count);
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void IDictionary_Generic_RemoveKey_ValidKeyContainedInDictionary(int count)
         {
-            if (!IsReadOnly)
-            {
-                var dictionary = GenericIDictionaryFactory(count);
-                var missingKey = GetNewKey(dictionary);
-                dictionary.Add(missingKey, CreateTValue(34251));
-                Assert.True(dictionary.Remove(missingKey));
-                Assert.Equal(count, dictionary.Count);
-            }
+            if (IsReadOnly) return;
+            var dictionary = GenericIDictionaryFactory(count);
+            var missingKey = GetNewKey(dictionary);
+            dictionary.Add(missingKey, CreateTValue(34251));
+            Assert.True(dictionary.Remove(missingKey));
+            Assert.Equal(count, dictionary.Count);
         }
 
         [Theory]
         [MemberData(nameof(ValidCollectionSizes))]
         public void IDictionary_Generic_RemoveKey_DefaultKeyNotContainedInDictionary(int count)
         {
-            if (!IsReadOnly)
+            if (IsReadOnly) return;
+            var dictionary = GenericIDictionaryFactory(count);
+            if (DefaultValueAllowed)
             {
-                var dictionary = GenericIDictionaryFactory(count);
-                if (DefaultValueAllowed)
-                {
-                    var missingKey = default(TKey);
-                    while (dictionary.ContainsKey(missingKey))
-                        dictionary.Remove(missingKey);
-                    Assert.False(dictionary.Remove(missingKey));
-                }
-                else
-                {
-                    Assert.Throws<ArgumentNullException>(() => dictionary.Remove(default(TKey)));
-                }
+                var missingKey = default(TKey);
+                while (dictionary.ContainsKey(missingKey))
+                    dictionary.Remove(missingKey);
+                Assert.False(dictionary.Remove(missingKey));
+            }
+            else
+            {
+                Assert.Throws<ArgumentNullException>(() => dictionary.Remove(default(TKey)));
             }
         }
 
