@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>0.1.1-beta</VersionPrefix>
+    <TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
+    <AssemblyName>FclEx.DataStructuresCSharp</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>FclEx.DataStructuresCSharp</PackageId>
+    <PackageTags>data structures</PackageTags>
+    <PackageProjectUrl>https://github.com/huoshan12345/FclEx.DataStructures</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/huoshan12345/FclEx.DataStructures/blob/master/LICENSE.TXT</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/huoshan12345/FclEx.DataStructures</RepositoryUrl>
+    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">1.0.4</RuntimeFrameworkVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>FclEx</RootNamespace>
+    <Version>0.1.2-beta</Version>
+    <Authors>huoshan12345</Authors>
+    <Copyright>huoshan12345</Copyright>
+    <Description />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FclEx" Version="0.2.0-*" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

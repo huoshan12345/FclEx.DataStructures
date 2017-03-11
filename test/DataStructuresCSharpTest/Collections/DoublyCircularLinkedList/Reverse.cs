@@ -37,7 +37,9 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
         }
 
         [Theory]
-        [MemberData(nameof(ValidCollectionSizes))]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(100)]
         public void Reverse(int listLength)
         {
             var list = GenericListFactory(listLength);
