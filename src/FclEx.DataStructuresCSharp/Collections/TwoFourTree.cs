@@ -184,7 +184,7 @@ namespace FclEx.Collections
                     Debug.Assert(node.Parent != null);
                     Debug.Assert(node.IsLeafNode);
                     AdjustNodeWhenRemove(node);
-                    node.Invalidate();
+                    if(node.GetChildIndex() < 0) node.Invalidate();
                 }
                 else node.RemoveItem(index);
                 _count--;
@@ -207,6 +207,7 @@ namespace FclEx.Collections
             var childIndex = node.GetChildIndex();
             var leftSiblingIndex = childIndex - 1;
             var rightSiblingIndex = childIndex + 1;
+
             // If a sibling on either side of this node is a 3-node or a 4-node (thus having more than 1 key)
             if (rightSiblingIndex <= parent.KeyNum && !parent.Children[rightSiblingIndex].IsKeyMin)
             {
@@ -215,7 +216,6 @@ namespace FclEx.Collections
                 var item = sibling.RemoveFirstItem();
                 node.Items[0] = parent.Items[childIndex];
                 parent.Items[childIndex] = item;
-
             }
             else if (leftSiblingIndex >= 0 && !parent.Children[leftSiblingIndex].IsKeyMin)
             {
@@ -226,7 +226,7 @@ namespace FclEx.Collections
                 parent.Items[childIndex] = item;
             }
             // If the parent is a 3-node or a 4-node and all adjacent siblings are 2-nodes
-            else if (!parent.IsKeyMin && rightSiblingIndex <= parent.KeyNum && !parent.Children[rightSiblingIndex].IsKeyMin)
+            else if (!parent.IsKeyMin && rightSiblingIndex <= parent.KeyNum && parent.Children[rightSiblingIndex].IsKeyMin)
             {
                 var sibling = parent.Children[rightSiblingIndex];
                 var item = parent.Items[childIndex];
@@ -245,20 +245,16 @@ namespace FclEx.Collections
             else if (parent.IsKeyMin)
             {
                 var siblingIndex = leftSiblingIndex >= 0 ? 0 : 1; // parent has only two children
-
                 parent.MergeWithChild(siblingIndex);
-                if (parent.Parent == null)
+                if (parent.Parent == null) return;
+                else if (parent.Parent.Parent == null)
                 {
-                    // parent is root
-                    parent.MergeWithChild(siblingIndex);
-                    return;
+                    // parent.Parent is root
+                    parent.Parent.MergeWithChild(siblingIndex);
                 }
                 else AdjustNodeWhenRemove(parent);
             }
-            else
-            {
-                Debug.Assert(false, "cannot reach here!");
-            }
+            else throw new Exception("cannot reach here!");
         }
 
         public void Add(TKey key, TValue value) => Add(new KeyValuePair<TKey, TValue>(key, value));
@@ -515,7 +511,7 @@ namespace FclEx.Collections
             {
                 Debug.Assert(IsLeafNode);
                 Debug.Assert(index >= 0 && index < _keyNum);
-                if(Parent != null) Debug.Assert(_keyNum > MinKeyNum); // for non-root node
+                if (Parent != null) Debug.Assert(_keyNum > MinKeyNum); // for non-root node
                 var num = _keyNum - index - 1;
                 if (num > 0)
                 {
@@ -561,7 +557,7 @@ namespace FclEx.Collections
 
             public void MergeWithChild(int index)
             {
-                Debug.Assert(IsKeyMin);
+                Debug.Assert(Parent == null || IsKeyMin);
                 var child = _children[index];
                 if (index == 0) MergeWithLeftChild(child);
                 else MergeWithRightChild(child);

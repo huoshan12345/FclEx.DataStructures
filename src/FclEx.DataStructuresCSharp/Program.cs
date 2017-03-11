@@ -197,7 +197,7 @@ namespace FclEx
 
         public static void Main(string[] args)
         {
-            var dic = Enumerable.Range(1, 11).ToDictionary(m => m, m => m);
+            var dic = Enumerable.Range(1, 12).ToDictionary(m => m, m => m);
             var tree = new TwoFourTree<int, int>(dic);
 
             PrintTree(tree.ToLayerItems());
