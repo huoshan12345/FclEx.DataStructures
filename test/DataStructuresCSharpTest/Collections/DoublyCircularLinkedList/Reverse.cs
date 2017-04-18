@@ -22,25 +22,8 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
         }
 
         [Theory]
-        [InlineData(10, 0, 5)]
-        [InlineData(10, 3, 3)]
-        public void ReverseIntInt(int listLength, int index, int count)
-        {
-            var list = Enumerable.Range(1, listLength).ToList();
-            var linkedList = new DoublyCircularLinkedList<int>(list);
-            list.Reverse(index, count);
-            linkedList.Reverse(index, count);
-            for (var i = 0; i < list.Count; i++)
-            {
-                Assert.Equal(list[i], linkedList[i]);
-            }
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(100)]
-        public void Reverse(int listLength)
+        [MemberData(nameof(ValidCollectionSizes))]
+        public void Reverse_int(int listLength)
         {
             var list = GenericListFactory(listLength);
             var listBefore = list.ToList();
