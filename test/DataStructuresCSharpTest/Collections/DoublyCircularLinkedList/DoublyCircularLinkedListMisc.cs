@@ -123,7 +123,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
 
                 foreach (var item in itemsY)
                 {
-                    Assert.True(list.Contains(item)); //"Should contain the item."
+                    Assert.Contains(item, list); //"Should contain the item."
                 }
                 Assert.Equal(list.Count, itemsX.Length + (itemsY.Length * repeat)); //"Should have the same result."
 
