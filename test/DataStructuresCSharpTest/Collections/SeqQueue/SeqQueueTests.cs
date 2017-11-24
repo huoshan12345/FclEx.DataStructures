@@ -115,7 +115,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
         {
             var seed = 53134;
             var q = new SeqQueue<T>(capacity);
-            Assert.Equal(0, q.Count);
+            Assert.Empty(q);
 
             // Enqueue some values and make sure the count is correct
             var source = (List<T>)CreateEnumerable(EnumerableType.List, null, items, 0, 0);
@@ -240,7 +240,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
                 queue.TrimExcess();
                 queue.Clear();
                 queue.TrimExcess();
-                Assert.Equal(0, queue.Count);
+                Assert.Empty(queue);
 
                 AddToCollection(queue, count / 10);
                 queue.TrimExcess();
@@ -258,7 +258,7 @@ namespace DataStructuresCSharpTest.Collections.SeqQueue
                 queue.TrimExcess();
                 queue.Clear();
                 queue.TrimExcess();
-                Assert.Equal(0, queue.Count);
+                Assert.Empty(queue);
 
                 AddToCollection(queue, count);
                 queue.TrimExcess();

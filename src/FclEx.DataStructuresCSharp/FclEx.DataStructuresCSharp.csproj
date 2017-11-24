@@ -16,7 +16,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="FclEx" Version="0.3.0" />
+    <PackageReference Include="FclEx" Version="0.3.2" />
   </ItemGroup>
   
 </Project>

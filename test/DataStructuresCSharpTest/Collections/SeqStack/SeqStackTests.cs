@@ -191,7 +191,7 @@ namespace DataStructuresCSharpTest.Collections.SeqStack
                 stack.TrimExcess();
                 stack.Clear();
                 stack.TrimExcess();
-                Assert.Equal(0, stack.Count);
+                Assert.Empty(stack);
 
                 AddToCollection(stack, count / 10);
                 stack.TrimExcess();
@@ -209,7 +209,7 @@ namespace DataStructuresCSharpTest.Collections.SeqStack
                 stack.TrimExcess();
                 stack.Clear();
                 stack.TrimExcess();
-                Assert.Equal(0, stack.Count);
+                Assert.Empty(stack);
 
                 AddToCollection(stack, count);
                 stack.TrimExcess();

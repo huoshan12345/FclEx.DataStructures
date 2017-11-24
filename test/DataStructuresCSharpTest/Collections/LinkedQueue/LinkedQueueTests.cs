@@ -108,7 +108,7 @@ namespace DataStructuresCSharpTest.Collections.LinkedQueue
         {
             var seed = 53134;
             var q = new LinkedQueue<T>();
-            Assert.Equal(0, q.Count);
+            Assert.Empty(q);
 
             // Enqueue some values and make sure the count is correct
             var source = (List<T>)CreateEnumerable(EnumerableType.List, null, items, 0, 0);

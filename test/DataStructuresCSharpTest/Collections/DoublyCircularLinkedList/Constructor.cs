@@ -12,7 +12,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
         public void Constructor_Default()
         {
             var list = new DoublyCircularLinkedList<T>();
-            Assert.Equal(0, list.Count); //"Do not expect anything to be in the list."
+            Assert.Empty(list); //"Do not expect anything to be in the list."
         }
 
         [Theory]

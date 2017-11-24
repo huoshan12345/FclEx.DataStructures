@@ -21,7 +21,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
                     list.Insert(index, item);
                 }
 
-                Assert.True(list.Contains(item)); //"Expect it to contain the item."
+                Assert.Contains(item, list); //"Expect it to contain the item."
                 Assert.Equal(list.Count, items.Length + repeat); //"Expect to be the same."
 
 
@@ -67,7 +67,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
 
                 foreach (var item in itemsY)
                 {
-                    Assert.True(list.Contains(item)); //"Should contain the item."
+                    Assert.Contains(item, list); //"Should contain the item."
                 }
                 Assert.Equal(list.Count, itemsX.Length + (itemsY.Length * repeat)); //"Should have the same result."
 
@@ -92,7 +92,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
 
                 foreach (var item in itemsX)
                 {
-                    Assert.True(list.Contains(item)); //"Should contain the item."
+                    Assert.Contains(item, list); //"Should contain the item."
                 }
                 Assert.Equal(list.Count, itemsX.Length + (itemsX.Length)); //"Should have the same result."
 
@@ -170,7 +170,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
 
                 for (var i = 0; i < items.Length; i++)
                 {
-                    Assert.True(list.Contains(items[i])); //"Should contain item."
+                    Assert.Contains(items[i], list); //"Should contain item."
                 }
             }
 
@@ -180,7 +180,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
 
                 for (var i = 0; i < itemsY.Length; i++)
                 {
-                    Assert.False(list.Contains(itemsY[i])); //"Should not contain item"
+                    Assert.DoesNotContain(itemsY[i], list); //"Should not contain item"
                 }
             }
 
@@ -190,7 +190,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
                 for (var i = 0; i < items.Length; i++)
                 {
                     list.Remove(items[i]);
-                    Assert.False(list.Contains(items[i])); //"Should not contain item"
+                    Assert.DoesNotContain(items[i], list); //"Should not contain item"
                 }
             }
 
@@ -202,7 +202,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
                     list.Add(items[i]);
                     list.Remove(items[i]);
                     list.Add(items[i]);
-                    Assert.True(list.Contains(items[i])); //"Should contain item."
+                    Assert.Contains(items[i], list); //"Should contain item."
                 }
             }
 
@@ -217,10 +217,10 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
 
                 for (var i = 0; i < times + 1; i++)
                 {
-                    Assert.True(list.Contains(items[items.Length / 2])); //"Should contain item."
+                    Assert.Contains(items[items.Length / 2], list); //"Should contain item."
                     list.Remove(items[items.Length / 2]);
                 }
-                Assert.False(list.Contains(items[items.Length / 2])); //"Should not contain item"
+                Assert.DoesNotContain(items[items.Length / 2], list); //"Should not contain item"
             }
 
             public void ContainsNullWhenReference(T[] items, T value)
@@ -232,7 +232,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
 
                 var list = new DoublyCircularLinkedList<T>(items);
                 list.Add(value);
-                Assert.True(list.Contains(value)); //"Should contain item."
+                Assert.Contains(value, list); //"Should contain item."
             }
 
             #endregion
@@ -242,19 +242,19 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
             public void ClearEmptyList()
             {
                 var list = new DoublyCircularLinkedList<T>();
-                Assert.Equal(list.Count, 0); //"Should be equal to 0"
+                Assert.Empty(list); //"Should be equal to 0"
                 list.Clear();
-                Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                Assert.Empty(list); //"Should be equal to 0."
             }
 
             public void ClearMultipleTimesEmptyList(int times)
             {
                 var list = new DoublyCircularLinkedList<T>();
-                Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                Assert.Empty(list); //"Should be equal to 0."
                 for (var i = 0; i < times; i++)
                 {
                     list.Clear();
-                    Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                    Assert.Empty(list); //"Should be equal to 0."
                 }
             }
 
@@ -262,7 +262,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
             {
                 var list = new DoublyCircularLinkedList<T>(items);
                 list.Clear();
-                Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                Assert.Empty(list); //"Should be equal to 0."
             }
 
             public void ClearMultipleTimesNonEmptyList(T[] items, int times)
@@ -271,7 +271,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
                 for (var i = 0; i < times; i++)
                 {
                     list.Clear();
-                    Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                    Assert.Empty(list); //"Should be equal to 0."
                 }
             }
 

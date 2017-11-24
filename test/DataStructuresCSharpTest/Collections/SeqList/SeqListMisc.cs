@@ -242,19 +242,19 @@ namespace DataStructuresCSharpTest.Collections.SeqList
             public void ClearEmptyList()
             {
                 var list = new SeqList<T>();
-                Assert.Equal(list.Count, 0); //"Should be equal to 0"
+                Assert.Empty(list); //"Should be equal to 0"
                 list.Clear();
-                Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                Assert.Empty(list); //"Should be equal to 0."
             }
 
             public void ClearMultipleTimesEmptyList(int times)
             {
                 var list = new SeqList<T>();
-                Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                Assert.Empty(list); //"Should be equal to 0."
                 for (var i = 0; i < times; i++)
                 {
                     list.Clear();
-                    Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                    Assert.Empty(list); //"Should be equal to 0."
                 }
             }
 
@@ -262,7 +262,7 @@ namespace DataStructuresCSharpTest.Collections.SeqList
             {
                 var list = new SeqList<T>(items);
                 list.Clear();
-                Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                Assert.Empty(list); //"Should be equal to 0."
             }
 
             public void ClearMultipleTimesNonEmptyList(T[] items, int times)
@@ -271,7 +271,7 @@ namespace DataStructuresCSharpTest.Collections.SeqList
                 for (var i = 0; i < times; i++)
                 {
                     list.Clear();
-                    Assert.Equal(list.Count, 0); //"Should be equal to 0."
+                    Assert.Empty(list); //"Should be equal to 0."
                 }
             }
             
