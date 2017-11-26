@@ -39,7 +39,7 @@ namespace DataStructuresCSharpTest.Collections.DoublyCircularLinkedList
         [Theory]
         [InlineData(10, 0, 10)]
         [InlineData(10, 3, 3)]
-        [InlineData(10, 1, 10)]
+        [InlineData(10, 1, 1)]
         [InlineData(10, 10, 0)]
         [InlineData(10, 5, 5)]
         [InlineData(10, 0, 5)]
