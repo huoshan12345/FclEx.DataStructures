@@ -17,6 +17,7 @@ namespace DataStructuresCSharpTest.Common
         {
             yield return new object[] { 0 };
             yield return new object[] { 1 };
+            yield return new object[] { 10 };
             yield return new object[] { 100 };
         }
 

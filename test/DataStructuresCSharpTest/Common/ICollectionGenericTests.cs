@@ -67,12 +67,14 @@ namespace DataStructuresCSharpTest.Common
         {
             get
             {
-                yield return (IEnumerable<T> enumerable) => {
+                yield return (IEnumerable<T> enumerable) =>
+                {
                     var casted = (ICollection<T>)enumerable;
                     casted.Add(CreateT(2344));
                     return true;
                 };
-                yield return (IEnumerable<T> enumerable) => {
+                yield return (IEnumerable<T> enumerable) =>
+                {
                     var casted = (ICollection<T>)enumerable;
                     if (casted.Count() > 0)
                     {
@@ -81,7 +83,8 @@ namespace DataStructuresCSharpTest.Common
                     }
                     return false;
                 };
-                yield return (IEnumerable<T> enumerable) => {
+                yield return (IEnumerable<T> enumerable) =>
+                {
                     var casted = (ICollection<T>)enumerable;
                     if (casted.Count() > 0)
                     {
@@ -588,10 +591,10 @@ namespace DataStructuresCSharpTest.Common
         {
             if (IsReadOnly) return;
             var collection = GenericICollectionFactory(count);
-            var list = collection.OrderBy(item=>item.GetHashCode()).ToList();
-            foreach (var t in list)
+            var list = collection.OrderBy(item => item.GetHashCode()).ToList();
+            for (var i = 0; i < list.Count; i++)
             {
-                Assert.True(collection.Remove(t));
+                Assert.True(collection.Remove(list[i]));
             }
             Assert.Empty(collection);
         }
@@ -605,9 +608,9 @@ namespace DataStructuresCSharpTest.Common
                 var collection = GenericICollectionFactory(count);
                 var arr = collection.ToArray();
                 Array.Reverse(arr);
-                foreach (var t in arr)
+                for (var i = 0; i < arr.Length; i++)
                 {
-                    Assert.True(collection.Remove(t));
+                    Assert.True(collection.Remove(arr[i]));
                 }
                 Assert.Empty(collection);
             }

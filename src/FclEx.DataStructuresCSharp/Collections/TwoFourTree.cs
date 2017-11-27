@@ -96,7 +96,7 @@ namespace FclEx.Collections
                 }
                 if (node.IsLeafNode)
                 {
-                    node.InsertItem(index, item);
+                    node.InsertItemChild(index, item);
                     _count++;
                     _version++;
                     return;
@@ -179,31 +179,29 @@ namespace FclEx.Collections
 
             if (node.IsLeafNode)
             {
-                if (node.IsKeyMin && node != _root)
+                node.RemoveItem(index);
+                if (node.KeyNum == 0 && node != _root)
                 {
                     Debug.Assert(node.Parent != null);
-                    Debug.Assert(node.IsLeafNode);
                     AdjustNodeWhenRemove(node);
-                    if (node.GetChildIndex() < 0) node.Invalidate();
+                    // if (node.GetChildIndex() < 0) node.Invalidate();
                 }
-                else node.RemoveItem(index);
                 _count--;
                 _version++;
             }
             else
             {
-                var successor = node.Children[index].GetMinLeafNode();
+                var successor = node.Children[index].GetMaxLeafNode();
                 var item = successor.Items[successor.KeyNum - 1];
                 node.Items[index] = item;
                 RemoveItem(successor, successor.KeyNum - 1);
             }
         }
 
-        private static void AdjustNodeWhenRemove(TwoFourTreeNode node)
+        private void AdjustNodeWhenRemove(TwoFourTreeNode node)
         {
-            Debug.Assert(node.Parent != null);
-
             var parent = node.Parent;
+            Debug.Assert(parent != null);
             var childIndex = node.GetChildIndex();
             var leftSiblingIndex = childIndex - 1;
             var rightSiblingIndex = childIndex + 1;
@@ -213,49 +211,48 @@ namespace FclEx.Collections
             {
                 var sibling = parent.Children[rightSiblingIndex];
                 var pair = sibling.RemoveFirstItemChild();
-                node.Items[0] = parent.Items[childIndex];
-                node.Children[1] = pair.Node;
-                pair.Node.Parent = node;
+                node.AppendItemChild(parent.Items[childIndex], pair.Node);
                 parent.Items[childIndex] = pair.Item;
             }
             else if (leftSiblingIndex >= 0 && !parent.Children[leftSiblingIndex].IsKeyMin)
             {
                 var sibling = parent.Children[leftSiblingIndex];
                 var pair = sibling.RemoveLastItemChild();
-                node.Items[0] = parent.Items[childIndex - 1];
-                node.Children[0] = pair.Node;
-                pair.Node.Parent = node;
-                parent.Items[childIndex] = pair.Item;
+                node.PushFrontItemChild(parent.Items[leftSiblingIndex], pair.Node);
+                parent.Items[leftSiblingIndex] = pair.Item;
             }
-            // If the parent is a 3-node or a 4-node and all adjacent siblings are 2-nodes
+            // If all adjacent siblings are 2-nodes
             else if (rightSiblingIndex <= parent.KeyNum && parent.Children[rightSiblingIndex].IsKeyMin)
             {
-                var sibling = parent.Children[rightSiblingIndex];
-                if (!parent.IsKeyMin)
+                node.MergeWithRight(rightSiblingIndex, parent.Children[rightSiblingIndex]);
+                if (parent.KeyNum == 0)
                 {
-                    var item = parent.Items[childIndex];
-                    sibling.InsertItem(0, item);
-                    parent.RemoveItemChild(childIndex);
-                    parent.Children[childIndex] = sibling;
-                }
-                else
-                {
-                    node.Items[0] = parent.Items[0];
-                    AdjustNodeWhenRemove(parent);
+                    if (parent == _root)
+                    {
+                        _root.Invalidate();
+                        _root = node;
+                    }
+                    else
+                    {
+                        AdjustNodeWhenRemove(parent);
+                    }
                 }
             }
             else if (leftSiblingIndex >= 0 && parent.Children[leftSiblingIndex].IsKeyMin)
             {
                 var sibling = parent.Children[leftSiblingIndex];
-                if (!parent.IsKeyMin)
+                sibling.MergeWithRight(childIndex, node);
+                if (parent.KeyNum == 0)
                 {
-                    var item = parent.Items[childIndex - 1];
-                    parent.RemoveItemChild(childIndex - 1);
-                    sibling.InsertItem(sibling.KeyNum, item);
-                }
-                else
-                {
-                    AdjustNodeWhenRemove(parent);
+                    if (parent == _root)
+                    {
+                        _root.Invalidate();
+                        _root = sibling;
+                    }
+                    else
+                    {
+                        AdjustNodeWhenRemove(parent);
+                    }
                 }
             }
 
@@ -482,164 +479,139 @@ namespace FclEx.Collections
                 return p;
             }
 
-            public void InsertItemChild(int index, KeyValuePair<TKey, TValue> item, TwoFourTreeNode node)
+            public TwoFourTreeNode GetMaxLeafNode()
+            {
+                var p = this;
+                while (!p.IsLeafNode)
+                {
+                    p = p._children[_keyNum];
+                }
+                return p;
+            }
+
+            public void InsertItemChild(int index, KeyValuePair<TKey, TValue> item, TwoFourTreeNode node = null)
             {
                 Debug.Assert(!IsKeyFull);
                 Debug.Assert(index >= 0 && index <= _keyNum);
-                Debug.Assert(!IsLeafNode);
+                Debug.Assert(node != null && !IsLeafNode || node == null && IsLeafNode);
                 var num = _keyNum - index;
                 if (num > 0)
                 {
                     Array.Copy(_items, index, _items, index + 1, num);
-                    Array.Copy(_children, index + 1, _children, index + 2, num);
+                    if (node != null) Array.Copy(_children, index + 1, _children, index + 2, num);
                 }
                 _items[index] = item;
-                _children[index + 1] = node;
-                node.Parent = this;
+                if (node != null)
+                {
+                    _children[index + 1] = node;
+                    node.Parent = this;
+                }
                 _keyNum++;
             }
 
-            public void InsertItem(int index, KeyValuePair<TKey, TValue> item)
+            public void PushFrontItemChild(KeyValuePair<TKey, TValue> item, TwoFourTreeNode node = null)
             {
                 Debug.Assert(!IsKeyFull);
-                Debug.Assert(index >= 0 && index <= _keyNum);
-                var num = _keyNum - index;
-                if (num > 0)
+                Debug.Assert(node != null && !IsLeafNode || node == null && IsLeafNode);
+                if (_keyNum > 0)
                 {
-                    Array.Copy(_items, index, _items, index + 1, num);
+                    Array.Copy(_items, 0, _items, 1, _keyNum);
                 }
-                _items[index] = item;
+                _items[0] = item;
+                if (node != null)
+                {
+                    Array.Copy(_children, 0, _children, 1, _keyNum + 1);
+                    _children[0] = node;
+                    node.Parent = this;
+                }
                 _keyNum++;
             }
+
+            public void AppendItemChild(KeyValuePair<TKey, TValue> item, TwoFourTreeNode node = null) => InsertItemChild(_keyNum, item, node);
 
             public void RemoveItem(int index)
             {
-                // Debug.Assert(IsLeafNode);
+                Debug.Assert(IsLeafNode);
                 Debug.Assert(index >= 0 && index < _keyNum);
-                if (Parent != null) Debug.Assert(_keyNum > MinKeyNum); // for non-root node
                 var num = _keyNum - index - 1;
                 if (num > 0)
                 {
                     Array.Copy(_items, index + 1, _items, index, num);
                 }
-                --_keyNum;
 #if DEBUG
-                _items[_keyNum] = default;
+                _items[_keyNum - 1] = default;
 #endif
+                --_keyNum;
             }
 
-            public KeyValuePair<TKey, TValue> RemoveFirstItem()
+            private (KeyValuePair<TKey, TValue> Item, TwoFourTreeNode Node) RemoveItemChild(int index)
             {
-                var item = _items[0];
-                RemoveItem(0);
-                return item;
-            }
-
-            public KeyValuePair<TKey, TValue> RemoveLastItem()
-            {
-                var item = _items[_keyNum - 1];
-                RemoveItem(_keyNum - 1);
-                return item;
-            }
-
-            public void RemoveItemChild(int index)
-            {
-                Debug.Assert(!IsLeafNode);
+                //Debug.Assert(!IsLeafNode);
                 Debug.Assert(index >= 0 && index < _keyNum);
-                Debug.Assert(_keyNum > MinKeyNum);
+                Debug.Assert(_keyNum >= MinKeyNum);
+                var childIndex = index + 1;
+                var pair = (_items[index], IsLeafNode ? null : _children[childIndex]);
                 var num = _keyNum - index - 1;
                 if (num > 0)
                 {
                     Array.Copy(_items, index + 1, _items, index, num);
-                    Array.Copy(_children, index + 2, _children, index + 1, num);
-                }
-                --_keyNum;
+                    if (!IsLeafNode)
+                    {
+                        Array.Copy(_children, childIndex + 1, _children, childIndex, num);
 #if DEBUG
-                _items[_keyNum] = default;
-                _children[_keyNum + 1] = null;
+                        _children[_keyNum] = null;
 #endif
+                    }
+                }
+#if DEBUG
+                _items[_keyNum - 1] = default;
+#endif
+                --_keyNum;
+                return pair;
             }
+
+            public (KeyValuePair<TKey, TValue> Item, TwoFourTreeNode Node) RemoveLastItemChild() => RemoveItemChild(_keyNum - 1);
 
             public (KeyValuePair<TKey, TValue> Item, TwoFourTreeNode Node) RemoveFirstItemChild()
             {
+                Debug.Assert(_keyNum >= MinKeyNum);
+                var pair = (_items[0], (TwoFourTreeNode)null);
                 var num = _keyNum - 1;
-                var pair = (_items[0], Children[0]);
-                Array.Copy(_items, 1, _items, 0, num);
-                Array.Copy(_children, 1, _children, 0, num);
-                --_keyNum;
+                if (num > 0)
+                {
+                    Array.Copy(_items, 1, _items, 0, num);
+                }
+
+                if (!IsLeafNode)
+                {
+                    pair.Item2 = _children[0];
+                    Array.Copy(_children, 1, _children, 0, num + 1);
 #if DEBUG
-                _items[_keyNum] = default;
-                _children[_keyNum + 1] = null;
+                    if (!IsLeafNode) _children[_keyNum] = null;
 #endif
+                }
+#if DEBUG
+                _items[_keyNum - 1] = default;
+#endif
+                --_keyNum;
                 return pair;
             }
 
-            public (KeyValuePair<TKey, TValue> Item, TwoFourTreeNode Node) RemoveLastItemChild()
+            public void MergeWithRight(int rightIndex, TwoFourTreeNode right)
             {
-                var pair = (_items[_keyNum - 1], Children[_keyNum]);
-                --_keyNum;
-#if DEBUG
-                _items[_keyNum] = default;
-                _children[_keyNum + 1] = null;
-#endif
-                return pair;
-            }
-
-            public void MergeWithChild(int index)
-            {
-                Debug.Assert(Parent == null || IsKeyMin);
-                var child = _children[index];
-                if (index == 0) MergeWithLeftChild(child);
-                else MergeWithRightChild(child);
-                _keyNum += child.KeyNum;
-                child.Invalidate();
-            }
-
-            private void MergeWithRightChild(TwoFourTreeNode child)
-            {
-                Array.Copy(child._items, 0, _items, 1, child._keyNum);
-                if (child.IsLeafNode)
-                {
-                    IsLeafNode = true;
-                    return;
-                }
-                Debug.Assert(!IsLeafNode);
-                for (var i = 0; i < child._keyNum + 1; i++)
-                {
-                    _children[i + 1] = child._children[i];
-                    _children[i + 1].Parent = this;
-                }
-            }
-
-            private void MergeWithLeftChild(TwoFourTreeNode child)
-            {
-                _items[child._keyNum] = _items[0];
-                Array.Copy(child._items, 0, _items, 0, child._keyNum);
-                if (child.IsLeafNode)
-                {
-                    IsLeafNode = true;
-                    return;
-                }
-                Debug.Assert(!IsLeafNode);
-                _children[child._keyNum + 1] = _children[1];
-                for (var i = 0; i < child._keyNum + 1; i++)
-                {
-                    _children[i] = child._children[i];
-                    _children[i].Parent = this;
-                }
-            }
-
-            public void MergeWithParent()
-            {
-                Debug.Assert(IsKeyMin);
+                Debug.Assert(_keyNum == 0 && right._keyNum == 1
+                    || _keyNum == 1 && right._keyNum == 0);
                 Debug.Assert(Parent != null);
-                Debug.Assert(Parent.IsKeyMin);
-                Debug.Assert(GetChildIndex() == 0);
-                _items[1] = Parent._items[0];
-                _children[2] = Parent._children[1];
-                _children[2].Parent = this;
-                Parent = Parent.Parent;
-                Parent.Invalidate();
+                Debug.Assert(Parent == right.Parent);
+                Debug.Assert(Parent.Children[rightIndex] == right);
+
+                var pair = Parent.RemoveItemChild(rightIndex - 1);
+                AppendItemChild(pair.Item, IsLeafNode ? null : right._children[0]);
+
+                if (right._keyNum != 0)
+                    AppendItemChild(right._items[0], IsLeafNode ? null : right._children[1]);
+
+                right.Invalidate();
             }
         }
 

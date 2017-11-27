@@ -197,7 +197,7 @@ namespace FclEx
 
         public static void Main(string[] args)
         {
-            var dic = Enumerable.Range(1, 12).ToDictionary(m => m, m => m);
+            var dic = Enumerable.Range(1, 10).ToDictionary(m => m, m => m);
             var tree = new TwoFourTree<int, int>();
 
             foreach (var pair in dic)
@@ -208,11 +208,22 @@ namespace FclEx
 
             PrintTree(tree.ToLayerItems());
 
-            foreach (var pair in dic)
+
+            tree.Remove(4);
+            PrintTree(tree.ToLayerItems());
+
+            var random = new Random();
+
+            while (true)
             {
-                tree.Remove(pair.Key);
-                PrintTree(tree.ToLayerItems());
+                foreach (var pair in dic.OrderBy(m => random.Next()))
+                {
+                    if (!tree.Remove(pair.Key))
+                        throw new Exception();
+                    PrintTree(tree.ToLayerItems());
+                }
             }
+
 
 
 
