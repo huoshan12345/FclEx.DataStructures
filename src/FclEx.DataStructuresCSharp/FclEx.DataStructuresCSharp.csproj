@@ -13,6 +13,10 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseUrl>https://github.com/huoshan12345/FclEx.DataStructures/blob/master/LICENSE.TXT</PackageLicenseUrl>
     <Copyright>huoshan12345</Copyright>
+    <RootNamespace>FclEx</RootNamespace>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
   </PropertyGroup>
   
   <ItemGroup>

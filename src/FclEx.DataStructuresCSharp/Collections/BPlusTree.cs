@@ -25,14 +25,13 @@ namespace FclEx.Collections
         public BPlusTree(int minDegree, IComparer<TKey> comparer)
         {
             if (minDegree < 2) throw new ArgumentOutOfRangeException(nameof(minDegree), "min degree cannot be less than 2");
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
             MinDegree = minDegree;
             _level = 0;
             _root = null;
             _count = 0;
             _version = 0;
-            _comparer = comparer;
+            _comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
             _valueComparer = EqualityComparer<TValue>.Default;
         }
 

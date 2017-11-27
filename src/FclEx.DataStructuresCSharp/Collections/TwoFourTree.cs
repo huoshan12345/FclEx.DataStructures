@@ -9,6 +9,7 @@ namespace FclEx.Collections
 {
     public class TwoFourTree<TKey, TValue> : IKeyValueCollection<TKey, TValue>
     {
+
         private TwoFourTreeNode _root = new TwoFourTreeNode(true);
         private int _count = 0;
         private int _version = 0;
@@ -39,7 +40,7 @@ namespace FclEx.Collections
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        private Tuple<TwoFourTreeNode, int> FindItem(TKey key, bool checkValue = false, TValue value = default(TValue))
+        private Tuple<TwoFourTreeNode, int> FindItem(TKey key, bool checkValue = false, TValue value = default)
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
             var node = _root;
@@ -183,7 +184,7 @@ namespace FclEx.Collections
                     Debug.Assert(node.Parent != null);
                     Debug.Assert(node.IsLeafNode);
                     AdjustNodeWhenRemove(node);
-                    if(node.GetChildIndex() < 0) node.Invalidate();
+                    if (node.GetChildIndex() < 0) node.Invalidate();
                 }
                 else node.RemoveItem(index);
                 _count--;
@@ -210,49 +211,54 @@ namespace FclEx.Collections
             // If a sibling on either side of this node is a 3-node or a 4-node (thus having more than 1 key)
             if (rightSiblingIndex <= parent.KeyNum && !parent.Children[rightSiblingIndex].IsKeyMin)
             {
-                // rotate anticlockwise
                 var sibling = parent.Children[rightSiblingIndex];
-                var item = sibling.RemoveFirstItem();
+                var pair = sibling.RemoveFirstItemChild();
                 node.Items[0] = parent.Items[childIndex];
-                parent.Items[childIndex] = item;
+                node.Children[1] = pair.Node;
+                pair.Node.Parent = node;
+                parent.Items[childIndex] = pair.Item;
             }
             else if (leftSiblingIndex >= 0 && !parent.Children[leftSiblingIndex].IsKeyMin)
             {
-                // rotate clockwise
                 var sibling = parent.Children[leftSiblingIndex];
-                var item = sibling.RemoveLastItem();
-                node.Items[0] = parent.Items[childIndex];
-                parent.Items[childIndex] = item;
+                var pair = sibling.RemoveLastItemChild();
+                node.Items[0] = parent.Items[childIndex - 1];
+                node.Children[0] = pair.Node;
+                pair.Node.Parent = node;
+                parent.Items[childIndex] = pair.Item;
             }
             // If the parent is a 3-node or a 4-node and all adjacent siblings are 2-nodes
-            else if (!parent.IsKeyMin && rightSiblingIndex <= parent.KeyNum && parent.Children[rightSiblingIndex].IsKeyMin)
+            else if (rightSiblingIndex <= parent.KeyNum && parent.Children[rightSiblingIndex].IsKeyMin)
             {
                 var sibling = parent.Children[rightSiblingIndex];
-                var item = parent.Items[childIndex];
-                parent.RemoveItemChild(childIndex);
-                sibling.InsertItem(0, item);
-                parent.Children[childIndex] = sibling;
+                if (!parent.IsKeyMin)
+                {
+                    var item = parent.Items[childIndex];
+                    sibling.InsertItem(0, item);
+                    parent.RemoveItemChild(childIndex);
+                    parent.Children[childIndex] = sibling;
+                }
+                else
+                {
+                    node.Items[0] = parent.Items[0];
+                    AdjustNodeWhenRemove(parent);
+                }
             }
-            else if (!parent.IsKeyMin && leftSiblingIndex >= 0 && parent.Children[leftSiblingIndex].IsKeyMin)
+            else if (leftSiblingIndex >= 0 && parent.Children[leftSiblingIndex].IsKeyMin)
             {
                 var sibling = parent.Children[leftSiblingIndex];
-                var item = parent.Items[childIndex - 1];
-                parent.RemoveItemChild(childIndex - 1);
-                sibling.InsertItem(sibling.KeyNum, item);
-            }
-            // If the parent is a 2-node and the sibling is also a 2-node
-            else if (parent.IsKeyMin)
-            {
-                var siblingIndex = leftSiblingIndex >= 0 ? 0 : 1; // parent has only two children
-                parent.MergeWithChild(siblingIndex);
-                if (parent.Parent == null) return;
-                else if (parent.Parent.Parent == null)
+                if (!parent.IsKeyMin)
                 {
-                    // parent.Parent is root
-                    parent.Parent.MergeWithChild(siblingIndex);
+                    var item = parent.Items[childIndex - 1];
+                    parent.RemoveItemChild(childIndex - 1);
+                    sibling.InsertItem(sibling.KeyNum, item);
                 }
-                else AdjustNodeWhenRemove(parent);
+                else
+                {
+                    AdjustNodeWhenRemove(parent);
+                }
             }
+
             else throw new Exception("cannot reach here!");
         }
 
@@ -265,7 +271,7 @@ namespace FclEx.Collections
             var result = FindItem(key);
             if (result == null)
             {
-                value = default(TValue);
+                value = default;
                 return false;
             }
             value = result.Item1.Items[result.Item2].Value;
@@ -334,12 +340,12 @@ namespace FclEx.Collections
 
             private readonly KeyValuePair<TKey, TValue>[] _items;
             private TwoFourTreeNode[] _children;
-            public int _keyNum;
+            private int _keyNum;
 
             public int KeyNum => _keyNum;
             public KeyValuePair<TKey, TValue>[] Items => _items;
             public TwoFourTreeNode[] Children => _children;
-            public TwoFourTreeNode Parent { get; private set; }
+            public TwoFourTreeNode Parent { get; set; }
             public bool IsLeafNode
             {
                 get { return _children == null; }
@@ -508,7 +514,7 @@ namespace FclEx.Collections
 
             public void RemoveItem(int index)
             {
-                Debug.Assert(IsLeafNode);
+                // Debug.Assert(IsLeafNode);
                 Debug.Assert(index >= 0 && index < _keyNum);
                 if (Parent != null) Debug.Assert(_keyNum > MinKeyNum); // for non-root node
                 var num = _keyNum - index - 1;
@@ -518,7 +524,7 @@ namespace FclEx.Collections
                 }
                 --_keyNum;
 #if DEBUG
-                _items[_keyNum] = default(KeyValuePair<TKey, TValue>);
+                _items[_keyNum] = default;
 #endif
             }
 
@@ -549,9 +555,34 @@ namespace FclEx.Collections
                 }
                 --_keyNum;
 #if DEBUG
-                _items[_keyNum] = default(KeyValuePair<TKey, TValue>);
+                _items[_keyNum] = default;
                 _children[_keyNum + 1] = null;
 #endif
+            }
+
+            public (KeyValuePair<TKey, TValue> Item, TwoFourTreeNode Node) RemoveFirstItemChild()
+            {
+                var num = _keyNum - 1;
+                var pair = (_items[0], Children[0]);
+                Array.Copy(_items, 1, _items, 0, num);
+                Array.Copy(_children, 1, _children, 0, num);
+                --_keyNum;
+#if DEBUG
+                _items[_keyNum] = default;
+                _children[_keyNum + 1] = null;
+#endif
+                return pair;
+            }
+
+            public (KeyValuePair<TKey, TValue> Item, TwoFourTreeNode Node) RemoveLastItemChild()
+            {
+                var pair = (_items[_keyNum - 1], Children[_keyNum]);
+                --_keyNum;
+#if DEBUG
+                _items[_keyNum] = default;
+                _children[_keyNum + 1] = null;
+#endif
+                return pair;
             }
 
             public void MergeWithChild(int index)

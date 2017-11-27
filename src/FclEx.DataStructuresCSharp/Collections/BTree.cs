@@ -23,13 +23,12 @@ namespace FclEx.Collections
         public BTree(int minDegree, IComparer<TKey> comparer)
         {
             if (minDegree < 2) throw new ArgumentOutOfRangeException(nameof(minDegree), "min degree cannot be less than 2");
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
             MinDegree = minDegree;
             _root = null;
             _count = 0;
             _version = 0;
-            _comparer = comparer;
+            _comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
             _valueComparer = EqualityComparer<TValue>.Default;
         }
 
@@ -397,7 +396,7 @@ namespace FclEx.Collections
             for (var i = 0; i < right.KeyNum; i++)
             {
                 left.Items[left.KeyNum + i] = right.Items[i];
-                right.Items[i] = default(KeyValuePair<TKey, TValue>);
+                right.Items[i] = default;
             }
             if (!right.IsLeafNode)
             {

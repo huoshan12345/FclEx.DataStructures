@@ -236,9 +236,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (IsReadOnly) return;
             var collection = GenericICollectionFactory(count);
-            var itemsToRemove = collection.ToList();
             for (var i = 0; i < count; i++)
-                collection.Remove(collection.ElementAt(0));
+                Assert.True(collection.Remove(collection.ElementAt(0)));
             collection.Add(CreateT(254));
             Assert.Equal(1, collection.Count);
         }
@@ -575,9 +574,10 @@ namespace DataStructuresCSharpTest.Common
         {
             if (IsReadOnly) return;
             var collection = GenericICollectionFactory(count);
-            foreach (var value in collection.ToList())
+            var list = collection.ToList();
+            for (var i = 0; i < list.Count; i++)
             {
-                Assert.True(collection.Remove(value));
+                Assert.True(collection.Remove(list[i]));
             }
             Assert.Empty(collection);
         }

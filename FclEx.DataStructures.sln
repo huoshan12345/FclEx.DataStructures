@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E112CF57-1102-465F-B3CE-3CBAFD2637AF}"
 EndProject
@@ -18,7 +18,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FclEx.DataStructuresCSharp"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FclEx.DataStructuresCpp", "src\FclEx.DataStructuresCpp\FclEx.DataStructuresCpp.vcxproj", "{67FFD67F-F282-4362-84EE-E336117AF15B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructuresCSharpTest", "test\DataStructuresCSharpTest\DataStructuresCSharpTest.csproj", "{899671AF-B86A-46ED-AEFB-D3A085B1E619}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataStructuresCSharpTest", "test\DataStructuresCSharpTest\DataStructuresCSharpTest.csproj", "{899671AF-B86A-46ED-AEFB-D3A085B1E619}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FclEx.DsCs.ConsoleTest", "src\FclEx.DsCs.ConsoleTest\FclEx.DsCs.ConsoleTest.csproj", "{C4EB25E5-654C-41FA-946B-6CE26430ACB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,18 @@ Global
 		{899671AF-B86A-46ED-AEFB-D3A085B1E619}.Release|x64.Build.0 = Release|Any CPU
 		{899671AF-B86A-46ED-AEFB-D3A085B1E619}.Release|x86.ActiveCfg = Release|Any CPU
 		{899671AF-B86A-46ED-AEFB-D3A085B1E619}.Release|x86.Build.0 = Release|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Debug|x64.Build.0 = Debug|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Debug|x86.Build.0 = Debug|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Release|x64.ActiveCfg = Release|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Release|x64.Build.0 = Release|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,5 +86,9 @@ Global
 		{F2658CC2-2295-4192-B7F3-A0509E1BEFC1} = {E112CF57-1102-465F-B3CE-3CBAFD2637AF}
 		{67FFD67F-F282-4362-84EE-E336117AF15B} = {E112CF57-1102-465F-B3CE-3CBAFD2637AF}
 		{899671AF-B86A-46ED-AEFB-D3A085B1E619} = {4941C38C-5760-4C12-BB1E-64A3BC4761B1}
+		{C4EB25E5-654C-41FA-946B-6CE26430ACB0} = {E112CF57-1102-465F-B3CE-3CBAFD2637AF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A5D94E8A-27DF-4DDB-8F11-EFB6D4641DE7}
 	EndGlobalSection
 EndGlobal
