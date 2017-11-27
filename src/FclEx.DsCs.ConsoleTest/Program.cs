@@ -136,6 +136,7 @@ namespace FclEx
             //new Dictionary<int, int>(),
             //new SortedDictionary<int, int>(),
             new SkipList<int, int>(),
+            new TwoFourTree<int, int>(),
             //new AvlTree<int, int>(),
             //new RedBlackTree<int, int>(),
             //new BTree<int, int>(10),
@@ -205,27 +206,27 @@ namespace FclEx
                 tree.Add(pair);
                 // PrintTree(tree.ToLayerItems());
             }
-
             PrintTree(tree.ToLayerItems());
 
-
-            tree.Remove(4);
-            PrintTree(tree.ToLayerItems());
+            //tree.Remove(6);
+            //PrintTree(tree.ToLayerItems());
 
             var random = new Random();
-
-            while (true)
+            for (var i = 0; i < 3; i++)
             {
                 foreach (var pair in dic.OrderBy(m => random.Next()))
                 {
                     if (!tree.Remove(pair.Key))
                         throw new Exception();
-                    PrintTree(tree.ToLayerItems());
+                    // PrintTree(tree.ToLayerItems());
+                }
+
+                foreach (var pair in dic)
+                {
+                    tree.Add(pair);
+                    // PrintTree(tree.ToLayerItems());
                 }
             }
-
-
-
 
             TestDics();
 

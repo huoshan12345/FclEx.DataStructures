@@ -231,6 +231,7 @@ namespace FclEx.Collections
                     {
                         _root.Invalidate();
                         _root = node;
+                        _root.Parent = null;
                     }
                     else
                     {
@@ -248,6 +249,7 @@ namespace FclEx.Collections
                     {
                         _root.Invalidate();
                         _root = sibling;
+                        _root.Parent = null;
                     }
                     else
                     {
@@ -484,7 +486,7 @@ namespace FclEx.Collections
                 var p = this;
                 while (!p.IsLeafNode)
                 {
-                    p = p._children[_keyNum];
+                    p = p._children[p._keyNum];
                 }
                 return p;
             }
