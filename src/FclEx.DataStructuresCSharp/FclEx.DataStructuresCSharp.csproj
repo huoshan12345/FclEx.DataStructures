@@ -1,26 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>latest</LangVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageProjectUrl>https://github.com/huoshan12345/FclEx.DataStructures</PackageProjectUrl>
     <PackageTags>extensions;helpers</PackageTags>
-    <Version>0.2.0-beta1</Version>
+    <Version>0.2.1</Version>
     <Authors>huoshan12345</Authors>
-    <Company />
     <Description>Some basic useful extensions and helpers for C# fundamental class libraries</Description>
     <RepositoryUrl>https://github.com/huoshan12345/FclEx.DataStructures</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseUrl>https://github.com/huoshan12345/FclEx.DataStructures/blob/master/LICENSE.TXT</PackageLicenseUrl>
     <Copyright>huoshan12345</Copyright>
     <RootNamespace>FclEx</RootNamespace>
-    <ApplicationIcon />
     <OutputType>Library</OutputType>
-    <StartupObject />
   </PropertyGroup>
-  
+
+
   <ItemGroup>
-    <PackageReference Include="FclEx" Version="0.3.2" />
+    <Using Include="FclEx.Extensions" />
   </ItemGroup>
-  
+
 </Project>

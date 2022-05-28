@@ -1,5 +1,4 @@
 ﻿using System;
-using static FclEx.Helpers.ObjectHelper;
 
 namespace FclEx.Algorithms.Sorts
 {
@@ -17,7 +16,7 @@ namespace FclEx.Algorithms.Sorts
                 {
                     if (arr[j].CompareTo(arr[j + 1]) > 0)
                     {
-                        Swap(ref arr[j], ref arr[j + 1]);
+                        arr.Swap(j, j + 1);
                     }
                 }
             }
@@ -29,7 +28,7 @@ namespace FclEx.Algorithms.Sorts
         /// <param name="arr"></param>
         public static void ModifiedBubbleSort(T[] arr)
         {
-            var i = arr.Length - 1;  //初始时,最后位置保持不变  
+            var i = arr.Length - 1; //初始时,最后位置保持不变  
             while (i > 0)
             {
                 var pos = 0; //每趟开始时,无记录交换  
@@ -38,7 +37,7 @@ namespace FclEx.Algorithms.Sorts
                     if (arr[j].CompareTo(arr[j + 1]) > 0)
                     {
                         pos = j; //记录交换的位置   
-                        Swap(ref arr[j], ref arr[j + 1]);
+                        arr.Swap(j, j + 1);
                     }
                 }
                 i = pos; //为下一趟排序作准备  
@@ -59,19 +58,19 @@ namespace FclEx.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + 1]) > 0)
                     {
-                        Swap(ref arr[i], ref arr[i + 1]);
+                        arr.Swap(i, i + 1);
                     }
                 }
-                --high;                 //修改high值, 前移一位  
+                --high; //修改high值, 前移一位  
 
                 for (var i = high; i > low; --i) //反向冒泡,找到最小者  
                 {
                     if (arr[i].CompareTo(arr[i - 1]) < 0)
                     {
-                        Swap(ref arr[i], ref arr[i - 1]);
+                        arr.Swap(i, i - 1);
                     }
                 }
-                ++low;                  //修改low值,后移一位  
+                ++low; //修改low值,后移一位  
             }
         }
 
@@ -90,7 +89,7 @@ namespace FclEx.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + 1]) > 0)
                     {
-                        Swap(ref arr[i], ref arr[i + 1]);
+                        arr.Swap(i, i + 1);
                         bSorted = false;
                     }
                 }
@@ -98,7 +97,7 @@ namespace FclEx.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + 1]) > 0)
                     {
-                        Swap(ref arr[i], ref arr[i + 1]);
+                        arr.Swap(i, i + 1);
                         bSorted = false;
                     }
                 }
@@ -123,7 +122,7 @@ namespace FclEx.Algorithms.Sorts
                 {
                     if (arr[i].CompareTo(arr[i + gap]) > 0)
                     {
-                        Swap(ref arr[i], ref arr[i + gap]);
+                        arr.Swap(i, i + gap);
                         bSwapped = true;
                     }
                     ++i;

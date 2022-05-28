@@ -6,6 +6,7 @@ using Xunit;
 
 namespace DataStructuresCSharpTest.Common
 {
+    // ReSharper disable InconsistentNaming
     public abstract class IGenericSharedApiTests<T> : IEnumerableGenericTests<T>
     {
         #region IGenericSharedAPI<T> Helper methods

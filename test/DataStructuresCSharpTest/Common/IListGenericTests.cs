@@ -10,6 +10,7 @@ namespace DataStructuresCSharpTest.Common
     /// Contains tests that ensure the correctness of any class that implements the generic
     /// IList interface
     /// </summary>
+    // ReSharper disable InconsistentNaming
     public abstract class IListGenericTests<T> : ICollectionGenericTests<T>
     {
         #region IList<T> Helper Methods
@@ -27,7 +28,7 @@ namespace DataStructuresCSharpTest.Common
         /// <returns>An instance of an IList{T} that can be used for testing.</returns>
         protected virtual IList<T> GenericIListFactory(int count)
         {
-            IList<T> collection = GenericIListFactory();
+            var collection = GenericIListFactory();
             AddToCollection(collection, count);
             return collection;
         }
@@ -40,12 +41,12 @@ namespace DataStructuresCSharpTest.Common
             get
             {
                 yield return (IEnumerable<T> enumerable) => {
-                    IList<T> casted = ((IList<T>)enumerable);
+                    var casted = ((IList<T>)enumerable);
                     casted.Add(CreateT(2344));
                     return true;
                 };
                 yield return (IEnumerable<T> enumerable) => {
-                    IList<T> casted = ((IList<T>)enumerable);
+                    var casted = ((IList<T>)enumerable);
                     if (casted.Count > 0)
                     {
                         casted.Insert(0, CreateT(12));
@@ -54,7 +55,7 @@ namespace DataStructuresCSharpTest.Common
                     return false;
                 };
                 yield return (IEnumerable<T> enumerable) => {
-                    IList<T> casted = ((IList<T>)enumerable);
+                    var casted = ((IList<T>)enumerable);
                     if (casted.Count > 0)
                     {
                         casted[0] = CreateT(12);
@@ -64,7 +65,7 @@ namespace DataStructuresCSharpTest.Common
                 };
 
                 yield return (IEnumerable<T> enumerable) => {
-                    IList<T> casted = ((IList<T>)enumerable);
+                    var casted = ((IList<T>)enumerable);
                     if (casted.Count > 0)
                     {
                         return casted.Remove(casted[0]);
@@ -72,7 +73,7 @@ namespace DataStructuresCSharpTest.Common
                     return false;
                 };
                 yield return (IEnumerable<T> enumerable) => {
-                    IList<T> casted = ((IList<T>)enumerable);
+                    var casted = ((IList<T>)enumerable);
                     if (casted.Count > 0)
                     {
                         casted.RemoveAt(0);
@@ -81,7 +82,7 @@ namespace DataStructuresCSharpTest.Common
                     return false;
                 };
                 yield return (IEnumerable<T> enumerable) => {
-                    IList<T> casted = ((IList<T>)enumerable);
+                    var casted = ((IList<T>)enumerable);
                     if (casted.Count > 0)
                     {
                         casted.Clear();
@@ -116,7 +117,7 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IList_Generic_ItemGet_NegativeIndex_ThrowsArgumentOutOfRangeException(int count)
         {
-            IList<T> list = GenericIListFactory(count);
+            var list = GenericIListFactory(count);
             Assert.Throws<ArgumentOutOfRangeException>(() => list[-1]);
             Assert.Throws<ArgumentOutOfRangeException>(() => list[int.MinValue]);
         }
@@ -125,7 +126,7 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IList_Generic_ItemGet_IndexGreaterThanListCount_ThrowsArgumentOutOfRangeException(int count)
         {
-            IList<T> list = GenericIListFactory(count);
+            var list = GenericIListFactory(count);
             Assert.Throws<ArgumentOutOfRangeException>(() => list[count]);
             Assert.Throws<ArgumentOutOfRangeException>(() => list[count + 1]);
         }
@@ -134,7 +135,7 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IList_Generic_ItemGet_ValidGetWithinListBounds(int count)
         {
-            IList<T> list = GenericIListFactory(count);
+            var list = GenericIListFactory(count);
             T result;
             Assert.All(Enumerable.Range(0, count), index => result = list[index]);
         }
@@ -149,8 +150,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T validAdd = CreateT(0);
+                var list = GenericIListFactory(count);
+                var validAdd = CreateT(0);
                 Assert.Throws<ArgumentOutOfRangeException>(() => list[-1] = validAdd);
                 Assert.Throws<ArgumentOutOfRangeException>(() => list[int.MinValue] = validAdd);
                 Assert.Equal(count, list.Count);
@@ -163,8 +164,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T validAdd = CreateT(0);
+                var list = GenericIListFactory(count);
+                var validAdd = CreateT(0);
                 Assert.Throws<ArgumentOutOfRangeException>(() => list[count] = validAdd);
                 Assert.Throws<ArgumentOutOfRangeException>(() => list[count + 1] = validAdd);
                 Assert.Equal(count, list.Count);
@@ -177,8 +178,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (IsReadOnly && count > 0)
             {
-                IList<T> list = GenericIListFactory(count);
-                T before = list[count / 2];
+                var list = GenericIListFactory(count);
+                var before = list[count / 2];
                 Assert.Throws<NotSupportedException>(() => list[count / 2] = CreateT(321432));
                 Assert.Equal(before, list[count / 2]);
             }
@@ -190,8 +191,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (count > 0 && !IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = CreateT(123452);
+                var list = GenericIListFactory(count);
+                var value = CreateT(123452);
                 list[0] = value;
                 Assert.Equal(value, list[0]);
             }
@@ -203,7 +204,7 @@ namespace DataStructuresCSharpTest.Common
         {
             if (count > 0 && !IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
+                var list = GenericIListFactory(count);
                 if (DefaultValueAllowed)
                 {
                     list[0] = default(T);
@@ -223,9 +224,9 @@ namespace DataStructuresCSharpTest.Common
         {
             if (count > 0 && !IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = CreateT(123452);
-                int lastIndex = count > 0 ? count - 1 : 0;
+                var list = GenericIListFactory(count);
+                var value = CreateT(123452);
+                var lastIndex = count > 0 ? count - 1 : 0;
                 list[lastIndex] = value;
                 Assert.Equal(value, list[lastIndex]);
             }
@@ -237,8 +238,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (count > 0 && !IsReadOnly && DefaultValueAllowed)
             {
-                IList<T> list = GenericIListFactory(count);
-                int lastIndex = count > 0 ? count - 1 : 0;
+                var list = GenericIListFactory(count);
+                var lastIndex = count > 0 ? count - 1 : 0;
                 if (DefaultValueAllowed)
                 {
                     list[lastIndex] = default(T);
@@ -258,8 +259,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (count >= 2 && !IsReadOnly && DuplicateValuesAllowed)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = CreateT(123452);
+                var list = GenericIListFactory(count);
+                var value = CreateT(123452);
                 list[0] = value;
                 list[1] = value;
                 Assert.Equal(value, list[0]);
@@ -275,7 +276,7 @@ namespace DataStructuresCSharpTest.Common
             {
                 Assert.All(InvalidValues, value =>
                 {
-                    IList<T> list = GenericIListFactory(count);
+                    var list = GenericIListFactory(count);
                     Assert.Throws<ArgumentException>(() => list[count / 2] = value);
                 });
             }
@@ -291,8 +292,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (DefaultValueAllowed)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = default(T);
+                var list = GenericIListFactory(count);
+                var value = default(T);
                 if (list.Contains(value))
                 {
                     if (IsReadOnly)
@@ -303,7 +304,7 @@ namespace DataStructuresCSharpTest.Common
             }
             else
             {
-                IList<T> list = GenericIListFactory(count);
+                var list = GenericIListFactory(count);
                 Assert.Throws<ArgumentNullException>(() => list.IndexOf(default(T)));
             }
         }
@@ -314,8 +315,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (count > 0 && DefaultValueAllowed)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = default(T);
+                var list = GenericIListFactory(count);
+                var value = default(T);
                 if (!list.Contains(value))
                 {
                     if (IsReadOnly)
@@ -330,9 +331,9 @@ namespace DataStructuresCSharpTest.Common
         [MemberData(nameof(ValidCollectionSizes))]
         public void IList_Generic_IndexOf_ValidValueNotContainedInList(int count)
         {
-            IList<T> list = GenericIListFactory(count);
-            int seed = 54321;
-            T value = CreateT(seed++);
+            var list = GenericIListFactory(count);
+            var seed = 54321;
+            var value = CreateT(seed++);
             while (list.Contains(value))
                 value = CreateT(seed++);
             Assert.Equal(-1, list.IndexOf(value));
@@ -345,8 +346,8 @@ namespace DataStructuresCSharpTest.Common
             if (count > 0 && !IsReadOnly && DuplicateValuesAllowed)
             {
                 // IndexOf should always return the lowest index for which a matching element is found
-                IList<T> list = GenericIListFactory(count);
-                T value = CreateT(12345);
+                var list = GenericIListFactory(count);
+                var value = CreateT(12345);
                 list[0] = value;
                 list[count / 2] = value;
                 Assert.Equal(0, list.IndexOf(value));
@@ -358,7 +359,7 @@ namespace DataStructuresCSharpTest.Common
         public void IList_Generic_IndexOf_EachValueNoDuplicates(int count)
         {
             // Assumes no duplicate elements contained in the list returned by GenericIListFactory
-            IList<T> list = GenericIListFactory(count);
+            var list = GenericIListFactory(count);
             Assert.All(Enumerable.Range(0, count), index =>
             {
                 Assert.Equal(index, list.IndexOf(list[index]));
@@ -373,7 +374,7 @@ namespace DataStructuresCSharpTest.Common
             {
                 Assert.All(InvalidValues, value =>
                 {
-                    IList<T> list = GenericIListFactory(count);
+                    var list = GenericIListFactory(count);
                     Assert.Throws<ArgumentException>(() => list.IndexOf(value));
                 });
             }
@@ -385,10 +386,10 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                foreach (T duplicate in list.ToList()) // hard copies list to circumvent enumeration error
+                var list = GenericIListFactory(count);
+                foreach (var duplicate in list.ToList()) // hard copies list to circumvent enumeration error
                     list.Add(duplicate);
-                List<T> expectedList = list.ToList();
+                var expectedList = list.ToList();
 
                 Assert.All(Enumerable.Range(0, count), (index =>
                     Assert.Equal(index, list.IndexOf(expectedList[index]))
@@ -406,8 +407,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T validAdd = CreateT(0);
+                var list = GenericIListFactory(count);
+                var validAdd = CreateT(0);
                 Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-1, validAdd));
                 Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(int.MinValue, validAdd));
                 Assert.Equal(count, list.Count);
@@ -420,8 +421,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T validAdd = CreateT(12350);
+                var list = GenericIListFactory(count);
+                var validAdd = CreateT(12350);
                 list.Insert(count, validAdd);
                 Assert.Equal(count + 1, list.Count);
                 Assert.Equal(validAdd, list[count]);
@@ -434,7 +435,7 @@ namespace DataStructuresCSharpTest.Common
         {
             if (IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
+                var list = GenericIListFactory(count);
                 Assert.Throws<NotSupportedException>(() => list.Insert(count / 2, CreateT(321432)));
                 Assert.Equal(count, list.Count);
             }
@@ -446,8 +447,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = CreateT(123452);
+                var list = GenericIListFactory(count);
+                var value = CreateT(123452);
                 list.Insert(0, value);
                 Assert.Equal(value, list[0]);
                 Assert.Equal(count + 1, list.Count);
@@ -460,8 +461,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly && DefaultValueAllowed)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = default(T);
+                var list = GenericIListFactory(count);
+                var value = default(T);
                 list.Insert(0, value);
                 Assert.Equal(value, list[0]);
                 Assert.Equal(count + 1, list.Count);
@@ -474,9 +475,9 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = CreateT(123452);
-                int lastIndex = count > 0 ? count - 1 : 0;
+                var list = GenericIListFactory(count);
+                var value = CreateT(123452);
+                var lastIndex = count > 0 ? count - 1 : 0;
                 list.Insert(lastIndex, value);
                 Assert.Equal(value, list[lastIndex]);
                 Assert.Equal(count + 1, list.Count);
@@ -489,9 +490,9 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly && DefaultValueAllowed)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = default(T);
-                int lastIndex = count > 0 ? count - 1 : 0;
+                var list = GenericIListFactory(count);
+                var value = default(T);
+                var lastIndex = count > 0 ? count - 1 : 0;
                 list.Insert(lastIndex, value);
                 Assert.Equal(value, list[lastIndex]);
                 Assert.Equal(count + 1, list.Count);
@@ -504,8 +505,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly && DuplicateValuesAllowed)
             {
-                IList<T> list = GenericIListFactory(count);
-                T value = CreateT(123452);
+                var list = GenericIListFactory(count);
+                var value = CreateT(123452);
                 list.Insert(0, value);
                 list.Insert(1, value);
                 Assert.Equal(value, list[0]);
@@ -522,7 +523,7 @@ namespace DataStructuresCSharpTest.Common
             {
                 Assert.All(InvalidValues, value =>
                 {
-                    IList<T> list = GenericIListFactory(count);
+                    var list = GenericIListFactory(count);
                     Assert.Throws<ArgumentException>(() => list.Insert(count / 2, value));
                 });
             }
@@ -538,8 +539,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T validAdd = CreateT(0);
+                var list = GenericIListFactory(count);
+                var validAdd = CreateT(0);
                 Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(-1));
                 Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(int.MinValue));
                 Assert.Equal(count, list.Count);
@@ -552,8 +553,8 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
-                T validAdd = CreateT(0);
+                var list = GenericIListFactory(count);
+                var validAdd = CreateT(0);
                 Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(count));
                 Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(count + 1));
                 Assert.Equal(count, list.Count);
@@ -566,7 +567,7 @@ namespace DataStructuresCSharpTest.Common
         {
             if (IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
+                var list = GenericIListFactory(count);
                 Assert.Throws<NotSupportedException>(() => list.RemoveAt(count / 2));
                 Assert.Equal(count, list.Count);
             }
@@ -578,7 +579,7 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
+                var list = GenericIListFactory(count);
                 Assert.Equal(count, list.Count);
                 Assert.All(Enumerable.Range(0, count).Reverse(), index =>
                 {
@@ -594,7 +595,7 @@ namespace DataStructuresCSharpTest.Common
         {
             if (!IsReadOnly)
             {
-                IList<T> list = GenericIListFactory(count);
+                var list = GenericIListFactory(count);
                 Assert.All(Enumerable.Range(0, count), index =>
                 {
                     list.RemoveAt(0);

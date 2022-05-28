@@ -70,11 +70,11 @@ namespace DataStructuresCSharpTest.Common
         /// </summary>
         public static IEnumerable<object[]> EnumerableTestData()
         {
-            foreach (object[] collectionSizeArray in ValidCollectionSizes())
+            foreach (var collectionSizeArray in ValidCollectionSizes())
             {
                 foreach (EnumerableType enumerableType in Enum.GetValues(typeof(EnumerableType)))
                 {
-                    int count = (int)collectionSizeArray[0];
+                    var count = (int)collectionSizeArray[0];
                     yield return new object[] { enumerableType, count, 0, 0, 0 };                       // Empty Enumerable
                     yield return new object[] { enumerableType, count, count + 1, 0, 0 };               // Enumerable that is 1 larger
 
@@ -145,16 +145,16 @@ namespace DataStructuresCSharpTest.Common
         /// </summary>
         protected IEnumerable<T> CreateQueue(IEnumerable<T> enumerableToMatchTo, int count, int numberOfMatchingElements, int numberOfDuplicateElements)
         {
-            Queue<T> queue = new Queue<T>(count);
-            int seed = 528;
-            int duplicateAdded = 0;
+            var queue = new Queue<T>(count);
+            var seed = 528;
+            var duplicateAdded = 0;
             List<T> match = null;
 
             // Enqueue Matching elements
             if (enumerableToMatchTo != null)
             {
                 match = enumerableToMatchTo.ToList();
-                for (int i = 0; i < numberOfMatchingElements; i++)
+                for (var i = 0; i < numberOfMatchingElements; i++)
                 {
                     queue.Enqueue(match[i]);
                     while (duplicateAdded++ < numberOfDuplicateElements)
@@ -165,7 +165,7 @@ namespace DataStructuresCSharpTest.Common
             // Enqueue elements to reach the desired count
             while (queue.Count < count)
             {
-                T toEnqueue = CreateT(seed++);
+                var toEnqueue = CreateT(seed++);
                 while (queue.Contains(toEnqueue) || (match != null && match.Contains(toEnqueue))) // Don't want any unexpectedly duplicate values
                     toEnqueue = CreateT(seed++);
                 queue.Enqueue(toEnqueue);
@@ -177,8 +177,8 @@ namespace DataStructuresCSharpTest.Common
             Debug.Assert(queue.Count == count);
             if (match != null)
             {
-                int actualMatchingCount = 0;
-                foreach (T lookingFor in match)
+                var actualMatchingCount = 0;
+                foreach (var lookingFor in match)
                     actualMatchingCount += queue.Contains(lookingFor) ? 1 : 0;
                 Assert.Equal(numberOfMatchingElements, actualMatchingCount);
             }
@@ -194,16 +194,16 @@ namespace DataStructuresCSharpTest.Common
         /// </summary>
         protected IEnumerable<T> CreateList(IEnumerable<T> enumerableToMatchTo, int count, int numberOfMatchingElements, int numberOfDuplicateElements)
         {
-            List<T> list = new List<T>(count);
-            int seed = 528;
-            int duplicateAdded = 0;
+            var list = new List<T>(count);
+            var seed = 528;
+            var duplicateAdded = 0;
             List<T> match = null;
 
             // Add Matching elements
             if (enumerableToMatchTo != null)
             {
                 match = enumerableToMatchTo.ToList();
-                for (int i = 0; i < numberOfMatchingElements; i++)
+                for (var i = 0; i < numberOfMatchingElements; i++)
                 {
                     list.Add(match[i]);
                     while (duplicateAdded++ < numberOfDuplicateElements)
@@ -214,7 +214,7 @@ namespace DataStructuresCSharpTest.Common
             // Add elements to reach the desired count
             while (list.Count < count)
             {
-                T toAdd = CreateT(seed++);
+                var toAdd = CreateT(seed++);
                 while (list.Contains(toAdd) || (match != null && match.Contains(toAdd))) // Don't want any unexpectedly duplicate values
                     toAdd = CreateT(seed++);
                 list.Add(toAdd);
@@ -226,8 +226,8 @@ namespace DataStructuresCSharpTest.Common
             Debug.Assert(list.Count == count);
             if (match != null)
             {
-                int actualMatchingCount = 0;
-                foreach (T lookingFor in match)
+                var actualMatchingCount = 0;
+                foreach (var lookingFor in match)
                     actualMatchingCount += list.Contains(lookingFor) ? 1 : 0;
                 Assert.Equal(numberOfMatchingElements, actualMatchingCount);
             }
@@ -243,22 +243,22 @@ namespace DataStructuresCSharpTest.Common
         /// </summary>
         protected IEnumerable<T> CreateHashSet(IEnumerable<T> enumerableToMatchTo, int count, int numberOfMatchingElements)
         {
-            HashSet<T> set = new HashSet<T>(GetIEqualityComparer());
-            int seed = 528;
+            var set = new HashSet<T>(GetIEqualityComparer());
+            var seed = 528;
             List<T> match = null;
 
             // Add Matching elements
             if (enumerableToMatchTo != null)
             {
                 match = enumerableToMatchTo.ToList();
-                for (int i = 0; i < numberOfMatchingElements; i++)
+                for (var i = 0; i < numberOfMatchingElements; i++)
                     set.Add(match[i]);
             }
 
             // Add elements to reach the desired count
             while (set.Count < count)
             {
-                T toAdd = CreateT(seed++);
+                var toAdd = CreateT(seed++);
                 while (set.Contains(toAdd) || (match != null && match.Contains(toAdd, GetIEqualityComparer()))) // Don't want any unexpectedly duplicate values
                     toAdd = CreateT(seed++);
                 set.Add(toAdd);
@@ -268,8 +268,8 @@ namespace DataStructuresCSharpTest.Common
             Debug.Assert(set.Count == count);
             if (match != null)
             {
-                int actualMatchingCount = 0;
-                foreach (T lookingFor in match)
+                var actualMatchingCount = 0;
+                foreach (var lookingFor in match)
                     actualMatchingCount += set.Contains(lookingFor) ? 1 : 0;
                 Assert.Equal(numberOfMatchingElements, actualMatchingCount);
             }
@@ -285,22 +285,22 @@ namespace DataStructuresCSharpTest.Common
         /// </summary>
         protected IEnumerable<T> CreateSortedSet(IEnumerable<T> enumerableToMatchTo, int count, int numberOfMatchingElements)
         {
-            SortedSet<T> set = new SortedSet<T>(GetIComparer());
-            int seed = 528;
+            var set = new SortedSet<T>(GetIComparer());
+            var seed = 528;
             List<T> match = null;
 
             // Add Matching elements
             if (enumerableToMatchTo != null)
             {
                 match = enumerableToMatchTo.ToList();
-                for (int i = 0; i < numberOfMatchingElements; i++)
+                for (var i = 0; i < numberOfMatchingElements; i++)
                     set.Add(match[i]);
             }
 
             // Add elements to reach the desired count
             while (set.Count < count)
             {
-                T toAdd = CreateT(seed++);
+                var toAdd = CreateT(seed++);
                 while (set.Contains(toAdd) || (match != null && match.Contains(toAdd, GetIEqualityComparer()))) // Don't want any unexpectedly duplicate values
                     toAdd = CreateT(seed++);
                 set.Add(toAdd);
@@ -310,8 +310,8 @@ namespace DataStructuresCSharpTest.Common
             Debug.Assert(set.Count == count);
             if (match != null)
             {
-                int actualMatchingCount = 0;
-                foreach (T lookingFor in match)
+                var actualMatchingCount = 0;
+                foreach (var lookingFor in match)
                     actualMatchingCount += set.Contains(lookingFor) ? 1 : 0;
                 Assert.Equal(numberOfMatchingElements, actualMatchingCount);
             }

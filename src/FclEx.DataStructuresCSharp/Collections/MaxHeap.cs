@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using FclEx.Helpers;
 
 namespace FclEx.Collections
 {
@@ -107,7 +106,7 @@ namespace FclEx.Collections
                 if (child + 1 < length && _comparer.Compare(_items[child], _items[child + 1]) < 0) ++child;
                 if (_comparer.Compare(_items[current], _items[child]) > 0) break;
                 // _items[current] = _items[child];
-                ObjectHelper.Swap(ref _items[current], ref _items[child]);
+                _items.Swap(current, child);
                 current = child;
             }
             // _items[current] = value;

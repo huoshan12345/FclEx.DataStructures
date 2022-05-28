@@ -17,8 +17,8 @@ namespace DataStructuresCSharpTest.Common
                 return;
             }
             Assert.Equal(expected.Count, actual.Count);
-            IEnumerator e = expected.GetEnumerator();
-            IEnumerator a = actual.GetEnumerator();
+            var e = expected.GetEnumerator();
+            var a = actual.GetEnumerator();
             while (e.MoveNext())
             {
                 Assert.True(a.MoveNext(), "actual has fewer elements");
@@ -43,8 +43,8 @@ namespace DataStructuresCSharpTest.Common
                 return;
             }
             Assert.Equal(expected.Count, actual.Count);
-            IEnumerator<T> e = expected.GetEnumerator();
-            IEnumerator<T> a = actual.GetEnumerator();
+            using var e = expected.GetEnumerator();
+            using var a = actual.GetEnumerator();
             while (e.MoveNext())
             {
                 Assert.True(a.MoveNext(), "actual has fewer elements");
@@ -70,8 +70,8 @@ namespace DataStructuresCSharpTest.Common
             }
 
             // Lookups are an aggregated collections (enumerable contents), but ordered.
-            ILookup<object, object> e = expected.Cast<object>().ToLookup(key => key);
-            ILookup<object, object> a = actual.Cast<object>().ToLookup(key => key);
+            var e = expected.Cast<object>().ToLookup(key => key);
+            var a = actual.Cast<object>().ToLookup(key => key);
 
             // Dictionaries can't handle null keys, which is a possibility
             Assert.Equal(e.Where(kv => kv.Key != null).ToDictionary(g => g.Key, g => g.Count()), a.Where(kv => kv.Key != null).ToDictionary(g => g.Key, g => g.Count()));
@@ -89,8 +89,8 @@ namespace DataStructuresCSharpTest.Common
             }
 
             // Lookups are an aggregated collections (enumerable contents), but ordered.
-            ILookup<object, object> e = expected.Cast<object>().ToLookup(key => key);
-            ILookup<object, object> a = actual.Cast<object>().ToLookup(key => key);
+            var e = expected.Cast<object>().ToLookup(key => key);
+            var a = actual.Cast<object>().ToLookup(key => key);
 
             // Dictionaries can't handle null keys, which is a possibility
             Assert.Equal(e.Where(kv => kv.Key != null).ToDictionary(g => g.Key, g => g.Count()), a.Where(kv => kv.Key != null).ToDictionary(g => g.Key, g => g.Count()));

@@ -10,6 +10,7 @@ namespace DataStructuresCSharpTest.Common
     /// Contains tests that ensure the correctness of any class that implements the generic
     /// ICollection interface
     /// </summary>
+    // ReSharper disable InconsistentNaming
     public abstract class ICollectionGenericTests<T> : IEnumerableGenericTests<T>
     {
         #region ICollection<T> Helper Methods

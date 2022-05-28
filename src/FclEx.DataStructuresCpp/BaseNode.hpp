@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <stdexcept>
 #include "Define.h"
 
 namespace FclEx
@@ -40,7 +41,7 @@ namespace FclEx
 
 			explicit BaseNode(T item, SizeType neighborNodesNum) : Item(item)
 			{
-				if (neighborNodesNum <= 0) throw invalid_argument("neighborNodesNum");
+				if (neighborNodesNum <= 0) throw std::invalid_argument("neighborNodesNum");
 				_neighborNodes.resize(neighborNodesNum, nullptr);
 			}
 

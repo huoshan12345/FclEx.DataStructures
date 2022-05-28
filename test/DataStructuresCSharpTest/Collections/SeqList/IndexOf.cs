@@ -90,7 +90,7 @@ namespace DataStructuresCSharpTest.Collections.SeqList
         public void IndexOf_NonExistingValues(IndexOfMethod indexOfMethod, int count, bool frontToBackOrder)
         {
             var list = GenericListFactory(count);
-            var nonexistentValues = CreateEnumerable(TestBase.EnumerableType.List, list, count: count, numberOfMatchingElements: 0, numberOfDuplicateElements: 0);
+            var nonexistentValues = CreateEnumerable(TestBase.EnumerableType.List, list, count, 0, 0);
             var indexOf = IndexOfDelegateFromType(indexOfMethod);
 
             Assert.All(nonexistentValues, nonexistentValue =>
